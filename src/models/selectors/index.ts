@@ -1,0 +1,1 @@
+export { getDialogs } from "./dialogs-selectors";

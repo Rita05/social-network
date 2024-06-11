@@ -1,0 +1,25 @@
+import { UserProfileType } from "../../types/profile";
+
+const ADD_POST = 'ADD-POST';
+const CHANGE_POST_MESSAGE = 'CHANGE-POST-MESSAGE';
+const CHANGE_POST_LIKES_COUNT = 'CHANGE-POST-LIKES-COUNT';
+const ADD_USER_PROFILE = 'ADD-USER-PROFILE';
+
+export type AddPostActionType = ReturnType<typeof addPostAction>;
+
+export type СhangePostMessageActionType = ReturnType<typeof changePostMessageAction>;
+
+export type СhangePostLikesCountActionType = ReturnType<typeof changePostLikesCountAction>;
+
+export type AddUserProfileActionType = ReturnType<typeof addUserProfileAction>;
+
+export const addPostAction = () => ({ type: ADD_POST }) as const;
+
+export const changePostMessageAction = (postMessage: string) =>
+    ({ type: CHANGE_POST_MESSAGE, postMessage }) as const
+
+export const changePostLikesCountAction = (postId: number, liked: boolean) =>
+    ({ type: CHANGE_POST_LIKES_COUNT, postId, liked }) as const;
+
+export const addUserProfileAction = (profile: UserProfileType) =>
+    ({ type: ADD_USER_PROFILE, profile }) as const;

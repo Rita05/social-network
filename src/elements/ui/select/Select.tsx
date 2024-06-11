@@ -1,5 +1,8 @@
-import { DetailedHTMLProps, SelectHTMLAttributes, useState, KeyboardEvent, useEffect } from "react"
+import { useState, KeyboardEvent, useEffect, useRef } from "react"
 import { HtmlDivProps } from "../../../types/html"
+
+//hooks
+import { useOutsideClick } from "../../../hooks/useOutsideClick";
 
 //icons
 import dropDownArrow from '../../../assets/icons/arrow-down.svg';
@@ -59,9 +62,19 @@ export const Select = (props: SelectPropsType) => {
 	const SelectedOption = options?.find(option => option.value === value);
 	const HoveredOption = options?.find(option => option.value === hoveredValue);
 
+	const selectContainer = useRef<HTMLDivElement | null>(null);
+
 	useEffect(() => {
 		setHoveredValue(value);
 	}, [value]);
+
+
+	const handleCloseOptions = () => {
+		setShowDrop(false)
+	}
+
+
+	useOutsideClick(selectContainer, handleCloseOptions);
 
 	const handleDropShow = () => {
 		setShowDrop(!showDrop);
@@ -110,7 +123,7 @@ export const Select = (props: SelectPropsType) => {
 				<option value="">Rostov</option>
 				<option value="">Vologda</option>
 			</select> */}
-			<StyledSelect className={className} onKeyUp={handleOnKeyUp} tabIndex={0}>
+			<StyledSelect ref={selectContainer} className={className} onKeyUp={handleOnKeyUp} tabIndex={0}>
 				<StyledText onClick={handleDropShow}>
 					{SelectedOption && SelectedOption.value}
 				</StyledText>

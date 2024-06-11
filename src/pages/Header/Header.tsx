@@ -1,17 +1,39 @@
-
-
+//icons
 import logoIcon from '../../assets/icons/pearl.svg';
+import loginIcon from '../../assets/icons/login.svg';
+
+//types
+import { HeaderContainerPropsType } from './HeaderContainer';
 
 //styles
-import { LogoImg, StiledHeaderContent, StyledHeader } from './Header.styled';
+import { LoginBlock, LoginImg, LoginInLink, LoginText, LogoBlock, LogoImg, LogoText, StiledHeaderContent, StyledHeader } from './Header.styled';
 
-export const Header = () => {
-    return (
-        <StyledHeader>
-            <StiledHeaderContent>
-                <LogoImg src={logoIcon} />
-                <div>поиск</div>
-            </StiledHeaderContent>
-        </StyledHeader>
-    )
+export const Header = (props: HeaderContainerPropsType) => {
+	const { auth: { isAuth, login } } = props
+	console.log('isAuth: ', isAuth);
+	return (
+		<StyledHeader>
+			<StiledHeaderContent>
+				<LogoBlock>
+					<LogoImg src={logoIcon} />
+					<LogoText>{'PearlNet'}</LogoText>
+				</LogoBlock>
+				<LoginBlock>
+					{isAuth
+						? (
+							<LoginText>
+								{login}
+							</LoginText>
+						) : (
+							<LoginInLink to={'/login'}>
+								<LoginText>
+									{'Вход'}
+								</LoginText>
+								<LoginImg src={loginIcon} />
+							</LoginInLink>
+						)}
+				</LoginBlock>
+			</StiledHeaderContent >
+		</StyledHeader >
+	)
 }

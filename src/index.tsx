@@ -5,26 +5,20 @@ import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './models/store';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 
-
-let renderEntireTree = () => {
-  ReactDOM.render(
-    <React.StrictMode>
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
       <Provider store={store}>
-        {/* <StoreContext.Provider value={store}> */}
+        {/* @ts-expect-error Server Component */}
         <App />
-        {/* </StoreContext.Provider> */}
       </Provider>
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-}
+    </BrowserRouter >
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
-renderEntireTree();
-
-store.subscribe(() => {
-  renderEntireTree();
-});
 
 reportWebVitals();

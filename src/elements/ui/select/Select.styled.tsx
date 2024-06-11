@@ -1,19 +1,13 @@
 import { styled } from "styled-components";
 
-
 export const StyledSelect = styled.div`
   position: relative;
 `
 
 export const StyledText = styled.span`
 	display: inline-block;
-    width: 100%;
-    height: 100%;
-	/* font-size: 13px;
-	border: 1px solid black;
-	display: inline-block;
-	min-width: 150px;
-	min-height: 20px; */
+	width: 100%;
+	height: 100%;
 `
 export const DropDownArrow = styled.img`
   position: absolute;
@@ -24,10 +18,11 @@ export const DropDownArrow = styled.img`
 	height: 20px;
 `
 
-export const StyledOptions = styled.div`
+export const StyledOptions = styled.div<{ backgroundColor?: string }>`
 	position: absolute;
 	padding: 5px;
 	border: 1px solid black;
+	background-color: ${(props) => props.backgroundColor || '#fff'}; 
 `
 
 export const StyledOption = styled.div<{ isSelected: boolean }> `

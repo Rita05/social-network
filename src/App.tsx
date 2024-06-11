@@ -1,65 +1,71 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 //components
-import { Header } from './pages/Header/Header';
+import { Header } from './pages/header/Header';
 import { Footer } from './pages/Footer';
-import { MenuSideBar } from './pages/MenuSideBar/MenuSideBar';
-import { Content } from './pages/Content/Content';
-import { Messenger } from './pages/MenuSideBar/Messenger/Messenger';
-import { ProfileContainer } from './pages/MenuSideBar/Profile/ProfileContainer';
-import { DialogueContainer } from './pages/MenuSideBar/Messenger/Dialogue/DialogueContainer';
-import { Error } from './pages/Errors/Error';
-import { UsersList } from './pages/MenuSideBar/Users/UsersList';
+import { MenuSideBar } from './pages/menu-sidebar/MenuSideBar';
+import { Content } from './pages/content/Content';
+import { MessengerWithAuthRedirect } from './pages/menu-sidebar/Messenger/Messenger';
+import { ProfileContainer } from './pages/menu-sidebar/Profile/ProfileContainer';
+import { DialogueContainer } from './pages/menu-sidebar/Messenger/Dialogue/DialogueContainer';
+import { UsersContainer } from './pages/menu-sidebar/Users/UsersList/UsersContainer';
+import { Error } from './pages/errors/Error';
+import { HeaderContainer } from './pages/header/HeaderContainer';
+import { Login } from './pages/login/Login';
+
 
 //styles
 import { Container, MainContent } from './App.styled';
+import { WithSuspense } from './hocs/with-suspense';
+import { BrowserRouter } from 'react-router-dom';
 
-//types
-import { StateType } from './models/old-store';
 
 const PATH = {
+  BASEURL: '/',
   PROFILE: '/profile',
   MESSAGES: '/messages',
   SETTINGS: '/settings',
   ERROR: '/error',
-  USERS: '/users'
+  USERS: '/users',
+  AUTH: '/login'
 } as const
 
-type AppPropsType = {
-  state: StateType
-  store: any
-  dispatch: any
-}
-
-export const App = (props: any) => {
-  const { store } = props;
+export const App = () => {
+  const ProfileWithSuspense = WithSuspense(ProfileContainer);
+  const DialogueWithSuspense = WithSuspense(DialogueContainer);
+  const UsersWithSuspense = WithSuspense(UsersContainer);
+  const HeaderWithSuspense = WithSuspense(HeaderContainer);
   return (
-    <BrowserRouter>
-      <Container>
-        <Header />
-        <MainContent>
-          <MenuSideBar />
-          <Routes>
-            <Route path={'/'} element={<Navigate to={PATH.PROFILE} />} />
-            <Route
-              path={PATH.PROFILE}
-              element={<ProfileContainer />} />
-            <Route
-              path="messages/:id"
-              element={<DialogueContainer />} />
-            {/* <Route path="messages/:id" element={<Dialogue dialogsPage={state.dialogsPage} dispatch={dispatch} store={store} />} /> */}
-            <Route path={PATH.MESSAGES} element={<Messenger />} />
-            <Route path={PATH.USERS} element={<UsersList />} />
-            <Route path={"/*"} element={<Error message={'Not found'} />} />
-            <Route path={"messages/*"} element={<Error message={'Not found'} />} />
-            {/* <Route path={PATH.ERROR} element={<Error />} />
+    <Container>
+      <HeaderWithSuspense />
+      <MainContent>
+        <MenuSideBar />
+        <Routes>
+          <Route path={PATH.BASEURL} element={<Navigate to={PATH.PROFILE} />} />
+          <Route
+            path={PATH.PROFILE}
+            element={<ProfileWithSuspense />} />
+          <Route
+            path={`${PATH.PROFILE}/:userId?`}
+            element={<ProfileWithSuspense />}
+          />
+          <Route
+            path={`${PATH.MESSAGES}/:id`}
+            element={<DialogueWithSuspense />}
+          />
+          {/* <Route path="messages/:id" element={<Dialogue dialogsPage={state.dialogsPage} dispatch={dispatch} store={store} />} /> */}
+          <Route path={PATH.MESSAGES} element={<MessengerWithAuthRedirect />} />
+          <Route path={PATH.USERS} element={<UsersWithSuspense />} />
+          <Route path={PATH.AUTH} element={<Login />} />
+          <Route path={"/*"} element={<Error message={'Not found'} />} />
+          <Route path={`${PATH.MESSAGES}/*`} element={<Error message={'Not found'} />} />
+          {/* <Route path={PATH.ERROR} element={<Error />} />
           <Route path={"/*"} element={<Navigate to={PATH.ERROR} />} /> */}
-          </Routes>
-          {/* <Footer/> */}
-          {/* <Content /> */}
-        </MainContent>
-      </Container>
-    </BrowserRouter >
+        </Routes>
+        {/* <Footer/> */}
+        {/* <Content /> */}
+      </MainContent>
+    </Container>
   );
 }
