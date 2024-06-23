@@ -45,31 +45,10 @@ export class Users extends Component<UsersContainerPropsType, UsersListState> {
 
 	componentDidMount() {
 		this.props.getUsers(this.props.usersPage.currentPage, this.props.usersPage.pageSize);
-		// this.props.setIsLoading(true);
-		// try {
-		// 	const data = await UsersApi.getUsers(this.props.usersPage.currentPage, this.props.usersPage.pageSize);
-		// 	this.props.setIsLoading(false);
-		// 	this.props.addUsers(data.items);
-		// 	this.props.addTotalUsersCount(data.totalCount);
-		// } catch (error) {
-		// 	this.props.setIsLoading(false);
-		// 	console.log(error);
-		// }
 	}
 
 	handleChangePage = (page: number) => {
-		// this.props.changeCurrentPage(page);
 		this.props.getUsers(page, this.props.usersPage.pageSize);
-		// this.props.changeCurrentPage(page)
-		// this.props.setIsLoading(true);
-		// UsersApi.getUsers(page, this.props.usersPage.pageSize)
-		// 	.then((data) => {
-		// 		this.props.setIsLoading(false);
-		// 		this.props.addUsers(data.items);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error);
-		// 	})
 	}
 
 	render() {

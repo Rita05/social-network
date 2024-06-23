@@ -52,6 +52,6 @@ export const MenuSideBarIcon = styled.img`
 `
 
 export const MenuSideBarLabel = styled.span`
-
+	font-family: Montserrat-Alternates, sans-serif;
 `
 

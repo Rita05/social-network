@@ -34,7 +34,7 @@ export const StyledProfileHeaderContent = styled.div`
 export const StyledProfileAvatar = styled.div`
 	display: flex;
 	position: absolute;
-	width: 15rem;
+	transform: translateX(-50%);
 	height: auto;
 `
 
@@ -52,7 +52,7 @@ export const StyledUserImg = styled.img`
 export const StyledUploadFileIcon = styled.img`
 	position: absolute;
 	top: 5%;
-	right: 70px;
+	right: -55%;
 	width: 26px;
 	height: 26px;
 	padding: 2.5px;
@@ -61,6 +61,7 @@ export const StyledUploadFileIcon = styled.img`
 	border-radius: 50%;
 `
 export const StyledUserName = styled.span`
+	font-family:  Montserrat-Bold, sans-serif;
 	font-size: 23px;
 	font-weight: 500;
 	margin-top: 4rem;

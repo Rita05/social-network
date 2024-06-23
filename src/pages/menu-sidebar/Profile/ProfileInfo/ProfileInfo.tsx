@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 //selectors
 import { getUserProfile } from '../../../../models/selectors/profile-selectors';
+import { getRequestStatus } from '../../../../models/selectors';
 
 //icons
 import editProfileImg from '../../../../assets/icons/edit-profile.svg';
@@ -20,6 +21,7 @@ import searchJobImg from '../../../../assets/icons/search-job.svg';
 
 //components
 import ProfileInfoItem from './ProfileInfoItem';
+import { Preloader } from '../../../../elements/ui/preloader/Preloader';
 
 
 //styles
@@ -42,6 +44,7 @@ export const ProfileInfo = (props: ProfileInfo) => {
 		// contacts: { github, vk, facebook, twitter, website, youtube, mainLink },
 	} = profile;
 
+	const requestStatus = useSelector(getRequestStatus);
 
 	const infoData = [
 		{ icon: fullNameImg, title: 'ФИО', description: fullName },
@@ -88,7 +91,6 @@ export const ProfileInfo = (props: ProfileInfo) => {
 		)
 	}
 
-
 	return (
 		<StyledProfileInfo>
 			<StyledEditProfile>
@@ -100,24 +102,30 @@ export const ProfileInfo = (props: ProfileInfo) => {
 				</StyledEditProfileButton>
 			</StyledEditProfile>
 			<StyledProfileContent>
-				{infoData
-					.filter(info => info.description)
-					.map((info, index) => (
-						<ProfileInfoItem
-							key={index}
-							icon={info.icon}
-							title={info.title}
-							description={info.description}
-						/>
-					))}
-				<StyledProfileInfoItem>
-					<StyledProfileInfoItemIcon src={contactsImg} />
-					<StyledProfileInfoItemTitle>
-						Контакты:
-						{renderContacts()}
-					</StyledProfileInfoItemTitle>
-				</StyledProfileInfoItem>
+				{requestStatus === 'loading' ? <Preloader /> : (
+					<>
+						{
+							infoData
+								.filter(info => info.description)
+								.map((info, index) => (
+									<ProfileInfoItem
+										key={index}
+										icon={info.icon}
+										title={info.title}
+										description={info.description}
+									/>
+								))
+						}
+						< StyledProfileInfoItem >
+							<StyledProfileInfoItemIcon src={contactsImg} />
+							<StyledProfileInfoItemTitle>
+								Контакты:
+								{renderContacts()}
+							</StyledProfileInfoItemTitle>
+						</StyledProfileInfoItem>
+					</>
+				)}
 			</StyledProfileContent>
-		</StyledProfileInfo>
+		</StyledProfileInfo >
 	)
 }

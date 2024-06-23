@@ -5,17 +5,18 @@ import axios from "axios";
 import { ProfileApi } from "../../api/profile";
 
 //actions 
-import { AddPostActionType, СhangePostMessageActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setIsLoadingAction } from "../actions";
+import { AddPostActionType, СhangePostMessageActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setRequestStatusAction, SetRequestStatusActionType, SetUserProfileStatusActionType, setUserProfileStatus } from "../actions";
 
 //types
 import { PostType } from "../../types/posts";
 import { UserProfileType } from "../../types/profile";
-import { ErrorType } from "../../api/common-api";
+import { ErrorType, STATUS_CODE } from "../../api/common-api";
 
 export interface ProfilePageType {
 	posts: Array<PostType>
 	profile: UserProfileType
 	newPostMessage: string
+	status: string
 }
 
 export type ProfileActionsType =
@@ -23,6 +24,8 @@ export type ProfileActionsType =
 	| СhangePostMessageActionType
 	| СhangePostLikesCountActionType
 	| AddUserProfileActionType
+	| SetRequestStatusActionType
+	| SetUserProfileStatusActionType
 
 
 const initialProfileState: ProfilePageType = {
@@ -33,7 +36,8 @@ const initialProfileState: ProfilePageType = {
 		{ id: 4, message: 'dadada', likesCount: 1 },
 	],
 	profile: {} as UserProfileType,
-	newPostMessage: ''
+	newPostMessage: '',
+	status: ''
 }
 
 export const profileReducer = (state: ProfilePageType = initialProfileState, action: ProfileActionsType) => {
@@ -69,6 +73,11 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 				...state,
 				profile: action.profile
 			}
+		case 'SET-USER-PROFILE-STATUS':
+			return {
+				...state,
+				status: action.status
+			}
 		default:
 			return state;
 	}
@@ -76,18 +85,36 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 
 //thunks 
 export const getUserProfile = (userId: number) => async (dispatch: Dispatch<ProfileActionsType>) => {
+	dispatch(setRequestStatusAction('loading'));
 	try {
 		const data = await ProfileApi.getUserProfile(userId);
+		dispatch(setRequestStatusAction('succeeded'));
 		dispatch(addUserProfileAction(data));
 	} catch (error) {
-		if (axios.isAxiosError(error)) {
-
-
-		} else {
-
-		}
+		dispatch(setRequestStatusAction('failed'));
 	}
-	// } finally {
-	// 	dispatch(setIsLoadingAction(false));
-	// }
+}
+
+export const getUserProfileStatus = (userId: number) => async (dispatch: Dispatch<ProfileActionsType>) => {
+	dispatch(setRequestStatusAction('loading'));
+	try {
+		const response = await ProfileApi.getUserProfileStatus(userId);
+		dispatch(setRequestStatusAction('succeeded'));
+		dispatch(setUserProfileStatus(response));
+	} catch (error) {
+		dispatch(setRequestStatusAction('failed'));
+	}
+}
+
+export const updateUserProfileStatus = (status: string) => async (dispatch: Dispatch<ProfileActionsType>) => {
+	dispatch(setRequestStatusAction('loading'));
+	try {
+		const response = await ProfileApi.updateUserProfileStatus(status);
+		if (response.resultCode === STATUS_CODE.SUCCESSS) {
+			dispatch(setRequestStatusAction('succeeded'));
+			dispatch(setUserProfileStatus(status));
+		}
+	} catch (error) {
+		dispatch(setRequestStatusAction('failed'));
+	}
 }

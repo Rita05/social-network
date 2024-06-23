@@ -6,17 +6,18 @@ import { useParams } from 'react-router-dom';
 //components
 import { Profile } from "./Profile";
 
-//reducers
-import { getUserProfile, ProfilePageType } from "../../../models/reducers/profile-reducer";
-
 //actions
 import { addPostAction, changePostLikesCountAction, changePostMessageAction } from "../../../models/actions";
+
+//thunks
+import { getUserProfile, getUserProfileStatus, updateUserProfileStatus } from "../../../models/reducers/profile-reducer";
 
 //hoc
 import { withAuthRedirect } from "../../../hocs/withAuthRedirect";
 
 //types
 import { rootStoreType, useAppDispatch } from "../../../models/store";
+import { ProfilePageType } from "../../../models/reducers/profile-reducer";
 
 type ProfileMapStateToPropsType = {
   profilePage: ProfilePageType
@@ -27,11 +28,14 @@ type ProfilepDispatchToPropsType = {
   addPost: () => void,
   increasePostLikesCount: (postId: number, liked: boolean) => void
   getUserProfile: (userId: number) => void
+  getUserProfileStatus: (userId: number) => void
+  updateUserProfileStatus: (status: string) => void
 }
 
 export type ProfileContainerPropsType = ProfileMapStateToPropsType & ProfilepDispatchToPropsType;
 
 const ProfileComponent = (props: ProfileContainerPropsType) => {
+  const { status } = props.profilePage;
   const { userId } = useParams();
 
   const dispatch = useAppDispatch()
@@ -39,28 +43,8 @@ const ProfileComponent = (props: ProfileContainerPropsType) => {
   useEffect(() => {
     if (userId) {
       dispatch(getUserProfile(Number(userId)));
+      dispatch(getUserProfileStatus(Number(userId)));
     }
-    // (async () => {
-    // 	setIsLoading(true)
-    // 	if (userId) {
-    // 		try {
-    // 			const data = await ProfileApi.getUserProfile(userId);
-    // 			addUserProfile(data);
-    // 		} catch (error) {
-    // 			console.log(error);
-    // 		} finally {
-    // 			setIsLoading(false);
-    // 		}
-    // 	}
-    // })()
-    // ProfileApi.getUserProfile(userId)
-    // 	.then((data) => {
-    // 		setIsLoading(false);
-    // 		addUserProfile(data);
-    // 	})
-    // 	.catch((error) => {
-    // 		console.log(error);
-    // 	})
   }, [userId]);
 
   return (
@@ -80,7 +64,9 @@ const mapDispatchToProps = (dispatch: Dispatch): ProfilepDispatchToPropsType => 
     changePostMessage: (newPost: string) => { dispatch(changePostMessageAction(newPost)) },
     addPost: () => { dispatch(addPostAction()) },
     increasePostLikesCount: (postId: number, liked: boolean) => { dispatch(changePostLikesCountAction(postId, liked)) },
-    getUserProfile
+    getUserProfile,
+    getUserProfileStatus,
+    updateUserProfileStatus
   }
 }
 

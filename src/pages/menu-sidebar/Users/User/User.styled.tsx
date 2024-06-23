@@ -44,17 +44,20 @@ export const UserInfo = styled.div`
 	padding-top: 5px;
 `
 export const UserName = styled.span`
-	font-size: 13px;
+	font-family: Montserrat-Bold, sans-serif;
+	font-size: 15px;
 	font-weight: 700;
 	margin-bottom: 6px;
 `
 export const UserStatus = styled.span`
+	font-family: Montserrat-Alternates, sans-serif;
 	font-size: 13px;
 	font-weight: 500;
 	word-break: break-word;
 	color: ${theme.colors.secondaryFont};
 `
 export const SubscriptionButton = styled(Button)`
+	font-family: Montserrat-Alternates, sans-serif;
 	width: fit-content;
 	height: 28px;
 	background-color: ${theme.colors.primary};

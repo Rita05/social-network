@@ -1,12 +1,15 @@
 import { Dispatch } from "redux";
 
+//actions
+import { addUsersAction, AddUsersActionType, DragUsersActionType, followAction, FollowUserActionType, setCurrentPageAction, SetCurrentPageActionType, setIsFollowingInProgressAction, SetIsFollowingInProgressActionType, setTotalUsersCountAction, SetTotalUsersCountActionType, unFollowAction, UnFollowUserActionType } from "../actions/users-actions";
+
 //api
 import { UsersApi } from "../../api/users";
 import { STATUS_CODE } from "../../api/common-api";
 
 //types
 import { User } from "../../types/users";
-import { addUsersAction, AddUsersActionType, DragUsersActionType, followAction, FollowUserActionType, setCurrentPageAction, SetCurrentPageActionType, setIsFollowingInProgressAction, SetIsFollowingInProgressActionType, setIsLoadingAction, SetIsLoadingActionType, setTotalUsersCountAction, SetTotalUsersCountActionType, unFollowAction, UnFollowUserActionType } from "../actions/users-actions";
+import { setRequestStatusAction, SetRequestStatusActionType } from "../actions/requestStatus-actions";
 
 export type UsersPageType = {
 	users: Array<User>
@@ -14,7 +17,6 @@ export type UsersPageType = {
 	currentPage: number
 	totalUsersCount: number
 	portionSize: number
-	isLoading: boolean
 	followingInProgress: Array<number>
 }
 
@@ -25,7 +27,7 @@ export type UsersActionsType =
 	| DragUsersActionType
 	| SetCurrentPageActionType
 	| SetTotalUsersCountActionType
-	| SetIsLoadingActionType
+	| SetRequestStatusActionType
 	| SetIsFollowingInProgressActionType
 
 // let initialUsersState: UsersPageType = {
@@ -43,7 +45,6 @@ const initialUsersState: UsersPageType = {
 	currentPage: 1,
 	totalUsersCount: 0,
 	portionSize: 10,
-	isLoading: false,
 	followingInProgress: []
 }
 
@@ -80,11 +81,6 @@ export const usersReducer = (state: UsersPageType = initialUsersState, action: U
 				...state,
 				totalUsersCount: action.count
 			}
-		case 'TOGGLE-IS-LOADING':
-			return {
-				...state,
-				isLoading: action.isLoading
-			}
 		case 'TOGGLE-IS-FOLLOWING-PROGRESS':
 			return {
 				...state,
@@ -99,16 +95,16 @@ export const usersReducer = (state: UsersPageType = initialUsersState, action: U
 
 //thunks
 export const getUsers = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<UsersActionsType>) => {
-	dispatch(setIsLoadingAction(true));
+	dispatch(setRequestStatusAction('loading'));
 	dispatch(setCurrentPageAction(currentPage));
 	// this.props.changeCurrentPage(page);
 	try {
 		const data = await UsersApi.getUsers(currentPage, pageSize);
-		dispatch(setIsLoadingAction(false));
+		dispatch(setRequestStatusAction('succeeded'));
 		dispatch(addUsersAction(data.items));
 		dispatch(setTotalUsersCountAction(data.totalCount));
 	} catch (error) {
-		dispatch(setIsLoadingAction(false));
+		dispatch(setRequestStatusAction('failed'));
 		console.log(error);
 	}
 }

@@ -42,6 +42,7 @@ export const FriendMessageBlock = styled.div`
 `
 
 export const FriendName = styled.div`
+	font-family: Montserrat-Alternates, sans-serif;
 	font-size: 16px;
 	font-weight: 600;
 	line-height: 19.5px;

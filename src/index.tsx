@@ -12,7 +12,6 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        {/* @ts-expect-error Server Component */}
         <App />
       </Provider>
     </BrowserRouter >

@@ -19,6 +19,7 @@ export const StyledEditProfile = styled.div`
 `
 
 export const StyledEditProfileTitle = styled.span`
+	font-family: Montserrat-Bold, sans-serif;
 	font-size: 16px;
 	font-weight: 500;
 `
@@ -55,6 +56,7 @@ export const StyledProfileInfoItemIcon = styled.img`
 `
 
 export const StyledProfileInfoItemTitle = styled.span`
+	font-family: Montserrat-Alternates, sans-serif;
 	font-size: 14px;
 	font-weight: 500;
 	color: #626d7a;
@@ -62,13 +64,14 @@ export const StyledProfileInfoItemTitle = styled.span`
 
 const sharedStyles = css`
   font-size: 14px;
-  font-weight: normal;
   color: #000;
   margin-left: 6px;
   word-break: break-word;
 `;
 
 export const StyledProfileInfoItemDescription = styled.span`
+	font-family: Nunito Sans, sans-serif;
+	font-weight: 600;
 	${sharedStyles}
 `
 export const StyledProfileInfoItemContactsContent = styled(StyledProfileContent)`

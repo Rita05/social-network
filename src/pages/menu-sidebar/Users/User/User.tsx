@@ -15,9 +15,6 @@ import draggableUsersIcon from '../../../../assets/icons/dots-three.svg';
 import { DraggableButton, DraggableIcon, UserCard, SubscriptionButton, UserInfo, UserName, UserPhoto, UserPhotoWrapper, UserStatus, UserDetails } from "./User.styled";
 import { CSS } from '@dnd-kit/utilities';
 
-//api
-import { UsersApi } from '../../../../api/users';
-
 //types
 import { User as UserType } from "../../../../types/users";
 import { useSortable } from '@dnd-kit/sortable';
@@ -31,9 +28,7 @@ export type UserPropsType = {
 
 export const User = (props: UserPropsType) => {
 	const {
-		user: { id, name, photos, status, followed },
-		onFollowUser,
-		onUnfollowUser
+		user: { id, name, photos, status, followed }
 	} = props;
 
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
@@ -49,30 +44,10 @@ export const User = (props: UserPropsType) => {
 
 	const handleSubscribeUser = (userId: number) => () => {
 		dispatch(follow(userId));
-		// setIsFollowingInProgress(userId, true);
-		// try {
-		// 	const response = await UsersApi.followToUser(userId);
-		// 	if (response.resultCode === 0) {
-		// 		onFollowUser(userId);
-		// 	}
-		// 	setIsFollowingInProgress(userId, false);
-		// } catch (error) {
-		// 	console.log(error);
-		// }
 	}
 
 	const handleUnSubscribeUser = (userId: number) => () => {
 		dispatch(unFollow(userId));
-		// setIsFollowingInProgress(userId, true);
-		// try {
-		// 	const response = await UsersApi.unFollowFromUser(userId);
-		// 	if (response.resultCode === 0) {
-		// 		onUnfollowUser(userId);
-		// 	}
-		// 	setIsFollowingInProgress(userId, false);
-		// } catch (error) {
-		// 	console.log(error);
-		// }
 	}
 
 	const renderSubscriptionButton = () => {

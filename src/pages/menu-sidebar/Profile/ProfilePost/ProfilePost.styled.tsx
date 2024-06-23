@@ -28,13 +28,16 @@ export const StyledPostCreatorImg = styled.img`
 `
 
 export const StyledPostCreator = styled.span`
-	font-size: 13px;
-	font-weight: 500;
+	font-family: Montserrat-Alternates, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
 	margin-left: 12px;
 `
 
 export const StyledPostText = styled.span`
-	font-size: 13px;
+	font-family: Nunito, sans-serif;
+	font-size: 14px;
+	font-weight: 600;
 	margin-top: 8px;
 	margin-left: 8px;
 	word-break: break-word;
@@ -51,7 +54,7 @@ export const StyledLikes = styled.div`
 	background-color: #f0f2f5;
 `
 
-export const StyledLikesButton = styled(Button)`
+export const StyledLikesButton = styled(Button)`z
 	outline: none;
 	border: none;
 	padding: 0;

@@ -17,7 +17,6 @@ export type AddUsersActionType = ReturnType<typeof addUsersAction>;
 export type DragUsersActionType = ReturnType<typeof dragUserAction>;
 export type SetCurrentPageActionType = ReturnType<typeof setCurrentPageAction>;
 export type SetTotalUsersCountActionType = ReturnType<typeof setTotalUsersCountAction>;
-export type SetIsLoadingActionType = ReturnType<typeof setIsLoadingAction>;
 export type SetIsFollowingInProgressActionType = ReturnType<typeof setIsFollowingInProgressAction>;
 
 export const followAction = (userId: number) => ({ type: FOLLOW_USER, userId }) as const;
@@ -26,5 +25,4 @@ export const addUsersAction = (users: Array<User>) => ({ type: ADD_USERS, users 
 export const dragUserAction = (users: Array<User>) => ({ type: DRAG_USER, users }) as const;
 export const setCurrentPageAction = (currentPage: number) => ({ type: SET_CURRENT_PAGE, currentPage }) as const;
 export const setTotalUsersCountAction = (count: number) => ({ type: SET_TOTAL_USERS_COUNT, count }) as const;
-export const setIsLoadingAction = (isLoading: boolean) => ({ type: TOGGLE_IS_LOADING, isLoading }) as const;
 export const setIsFollowingInProgressAction = (userId: number, isLoading: boolean) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, userId, isLoading }) as const;

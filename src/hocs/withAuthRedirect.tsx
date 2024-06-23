@@ -1,4 +1,4 @@
-import React, { ComponentType, FC } from "react";
+import React, { ComponentType } from "react";
 import { connect, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
@@ -17,16 +17,17 @@ const mapStateToProps = (state: rootStoreType): MapStatePropsType => ({
 })
 
 
-export const withAuthRedirect = <T extends object>(Component: ComponentType<T> | FC<T>) => {
+export const withAuthRedirect = <T extends {}>(Component: ComponentType<T>) => {
 
-	const RedirectComponent = (props: MapStatePropsType & T) => {
+	const RedirectComponent = (props: MapStatePropsType) => {
 		const { isAuth, ...rest } = props;
 		if (!isAuth) {
 			return <Navigate to="/login" />;
 		}
-		return <Component {...(rest as T & {})} />;
+		return <Component {...(rest as T)} />;
 	};
 
 	const ConnectedRedirectComponent = connect(mapStateToProps)(RedirectComponent);
 	return ConnectedRedirectComponent;
 }
+

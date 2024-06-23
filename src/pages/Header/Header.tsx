@@ -10,7 +10,7 @@ import { LoginBlock, LoginImg, LoginInLink, LoginText, LogoBlock, LogoImg, LogoT
 
 export const Header = (props: HeaderContainerPropsType) => {
 	const { auth: { isAuth, login } } = props
-	console.log('isAuth: ', isAuth);
+
 	return (
 		<StyledHeader>
 			<StiledHeaderContent>

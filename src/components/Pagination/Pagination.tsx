@@ -195,7 +195,6 @@ export const Pagination = (props: IPaginationProps) => {
 		handleChangePage(currentPage + 1);
 
 		if (currentPage === rightPortionPageNumber) {
-			console.log('currentPage: ', currentPage);
 			setPortionNumber(portionNumber + 1);
 		}
 	}

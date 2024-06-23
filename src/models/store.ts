@@ -1,6 +1,7 @@
 import { AnyAction, applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { useDispatch } from "react-redux";
+import { reducer as formReducer } from 'redux-form';
 
 //reducers
 import { dialogsReducer } from "./reducers/dialogs-reducer";
@@ -8,6 +9,7 @@ import { profileReducer } from "./reducers/profile-reducer";
 import { sidebarReducer } from "./reducers/sidebar-reducer";
 import { usersReducer } from "./reducers/users-reducer";
 import { authReducer } from "./reducers/auth-reducer";
+import { requestStatusReducer } from "./reducers/requestStatus-reducer";
 
 //types
 declare global {
@@ -21,7 +23,9 @@ const rootReducer = combineReducers({
 	dialogsPage: dialogsReducer,
 	sidebarPage: sidebarReducer,
 	usersPage: usersReducer,
-	auth: authReducer
+	auth: authReducer,
+	loader: requestStatusReducer,
+	form: formReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -1,5 +1,8 @@
 import { Dispatch } from "redux";
 
+//actions
+import { setRequestStatusAction, SetRequestStatusActionType } from "../actions";
+
 //api
 import { AuthApi } from "../../api/auth";
 import { STATUS_CODE } from "../../api/common-api";
@@ -14,7 +17,7 @@ export type AuthUserStateType = {
 	isAuth: boolean
 }
 
-export type AuthUserActionsType = setAuthUserDataActionType
+export type AuthUserActionsType = setAuthUserDataActionType | SetRequestStatusActionType
 
 const initialAuthState: AuthUserStateType = {
 	id: null,
@@ -39,12 +42,15 @@ export const authReducer = (state: AuthUserStateType = initialAuthState, action:
 
 //thunks
 export const getAuthUser = () => async (dispatch: Dispatch<AuthUserActionsType>) => {
+	dispatch(setRequestStatusAction('loading'));
 	try {
 		const result = await AuthApi.getCurrentUser()
 		if (result.resultCode === STATUS_CODE.SUCCESSS) {
+			dispatch(setRequestStatusAction('succeeded'));
 			dispatch(setAuthUserDataAction(result.data));
 		}
 	} catch (error) {
+		dispatch(setRequestStatusAction('failed'));
 		console.log(error);
 	}
 }

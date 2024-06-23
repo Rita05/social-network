@@ -1,11 +1,16 @@
 
 import React, { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useSelector } from "react-redux";
+
+//selectors
+import { getRequestStatus } from "../../../models/selectors";
 
 //components
 import UploadInput, { UploadInputFile } from "../../../elements/ui/uploadInput/UploadInput";
 import { ProfilePost } from "./ProfilePost/ProfilePost";
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo";
 import { ProfileAddPostForm } from "./ProfileAddPostForm/ProfileAddPostForm";
+import { ProfileStatus } from "./ProfileStatus/ProfileStatus";
 
 //icons
 import uploadFileImg from '../../../assets/icons/uploadFile.svg';
@@ -17,14 +22,16 @@ import { StyledProfileAvatar, StyledProfileContent, StyledProfileContentPosts, S
 
 //types
 import { ProfileContainerPropsType } from "./ProfileContainer";
+import { Preloader } from "../../../elements/ui/preloader/Preloader";
 
 
 export const Profile = (props: ProfileContainerPropsType) => {
   const {
-    profilePage: { posts, newPostMessage, profile },
+    profilePage: { posts, newPostMessage, profile, status },
     changePostMessage,
     addPost,
-    increasePostLikesCount
+    increasePostLikesCount,
+    updateUserProfileStatus
   } = props;
 
   const {
@@ -34,6 +41,7 @@ export const Profile = (props: ProfileContainerPropsType) => {
   } = profile;
 
   const [uploadAvatar, setUploadAvatar] = useState<string | ArrayBuffer | null>(myPhoto);
+  const requestStatus = useSelector(getRequestStatus);
 
   const handleChangePostInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
     changePostMessage(event.currentTarget.value);
@@ -91,20 +99,28 @@ export const Profile = (props: ProfileContainerPropsType) => {
   return (
     <StyledProfileSection>
       <StyledProfileHeader>
-        <StyledProfileHeaderCover />
-        <StyledProfileHeaderContent>
-          <StyledProfileAvatar>
-            <StyledUserImg src={photos?.small || defaultAvatar} />
-            <UploadInput
-              onChange={handleProfileAvatarUpload as (file: UploadInputFile | UploadInputFile[]) => void}
-            >
-              <StyledUploadFileIcon src={uploadFileImg} />
-            </UploadInput>
-          </StyledProfileAvatar>
-          <StyledUserName>
-            {fullName}
-          </StyledUserName>
-        </StyledProfileHeaderContent>
+        {requestStatus === 'loading' ? <Preloader /> : (
+          <>
+            <StyledProfileHeaderCover />
+            <StyledProfileHeaderContent>
+              <StyledProfileAvatar>
+                <StyledUserImg src={photos?.small || defaultAvatar} />
+                <UploadInput
+                  onChange={handleProfileAvatarUpload as (file: UploadInputFile | UploadInputFile[]) => void}
+                >
+                  <StyledUploadFileIcon src={uploadFileImg} />
+                </UploadInput>
+              </StyledProfileAvatar>
+              <StyledUserName>
+                {fullName}
+              </StyledUserName>
+              <ProfileStatus
+                status={status}
+                updateProfileStatus={updateUserProfileStatus}
+              />
+            </StyledProfileHeaderContent>
+          </>
+        )}
       </StyledProfileHeader>
       <StyledProfileContent>
         <ProfileInfo />

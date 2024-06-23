@@ -3,7 +3,7 @@
 import avatar from '../../assets/icons/ avatar.png';
 
 //types
-import { СhangeDialogueMessageActionType, SendMessageActionType } from "../actions/dialogs-actions";
+import { SendMessageActionType } from "../actions/dialogs-actions";
 import { Message } from "../../types/messages";
 import { DialogsPropsType } from "../../types/dialogue";
 
@@ -13,7 +13,8 @@ export interface DialogsPageType {
 	newDialogueMessage: string
 }
 
-export type DialogsActionsType = СhangeDialogueMessageActionType | SendMessageActionType;
+// export type DialogsActionsType = СhangeDialogueMessageActionType | SendMessageActionType;
+export type DialogsActionsType = SendMessageActionType;
 
 const initialDialogsState: DialogsPageType = {
 	dialogs: [
@@ -34,17 +35,17 @@ const initialDialogsState: DialogsPageType = {
 export const dialogsReducer = (state: DialogsPageType = initialDialogsState, action: DialogsActionsType): DialogsPageType => {
 
 	switch (action.type) {
-		case 'CHANGE_DIALOGUE_MESSAGE':
-			return {
-				...state,
-				newDialogueMessage: action.newDialogueMessage
-			}
+		// case 'CHANGE_DIALOGUE_MESSAGE':
+		// 	return {
+		// 		...state,
+		// 		newDialogueMessage: action.newDialogueMessage
+		// 	}
 		case 'SEND_MESSAGE':
-			const newMessage = { id: 6, message: state.newDialogueMessage, time: `${new Date()}` };
+			const newMessage = { id: 6, message: action.newDialogueMessage, time: `${new Date()}` };
 			return {
 				...state,
 				messages: [...state.messages, newMessage],
-				newDialogueMessage: ''
+				// newDialogueMessage: ''
 			}
 		default:
 			return state;

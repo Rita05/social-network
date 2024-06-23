@@ -46,13 +46,15 @@ export const MessageBlock = styled.div`
 `
 
 export const SenderMessageName = styled.div`
-	font-size: 18px;
+	font-family: Montserrat-Alternates, sans-serif;
+	font-size: 16px;
 	font-weight: 600;
 	line-height: 21.94px;
 	color: #FFFFFF;
 `
 
 export const MessageText = styled.span`
+	font-family: Nunito Sans, sans-serif;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 19.5px;

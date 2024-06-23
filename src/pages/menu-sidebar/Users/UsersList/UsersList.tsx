@@ -14,6 +14,8 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
+//selectors
+import { getRequestStatus } from '../../../../models/selectors';
 
 //componets
 import { User } from "../User/User";
@@ -22,12 +24,12 @@ import { SelectOption, SingleSelectValue } from "../../../../elements/ui/select/
 import { Pagination } from '../../../../components/Pagination/Pagination';
 import { Preloader } from '../../../../elements/ui/preloader/Preloader';
 
-
 //types
 import { UsersContainerPropsType } from './UsersContainer';
 
 //styles
 import { UsersContainer, UsersSubscriptionSelect, UsersContent } from "./UsersList.styled";
+import { useSelector } from 'react-redux';
 
 const usersStatus = {
 	all: 'Все',
@@ -42,7 +44,7 @@ export type UsersPropsType = UsersContainerPropsType & {
 export const UsersList = (props: UsersPropsType) => {
 
 	const {
-		usersPage: { users, totalUsersCount, pageSize, currentPage, portionSize, isLoading },
+		usersPage: { users, totalUsersCount, pageSize, currentPage, portionSize },
 		followUser,
 		unfollowUser,
 		dragUser,
@@ -50,6 +52,8 @@ export const UsersList = (props: UsersPropsType) => {
 	} = props;
 
 	const [selectedUsersStatus, setSelectedUsersStatus] = useState('');
+
+	const requestStatus = useSelector(getRequestStatus);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -108,7 +112,7 @@ export const UsersList = (props: UsersPropsType) => {
 				onChange={(option: SelectOption) => handleUserStatusChange(option?.value)}
 				options={usersStatusOptions}
 			/>
-			{isLoading
+			{requestStatus === 'loading'
 				? (<Preloader />)
 				: (
 					<>

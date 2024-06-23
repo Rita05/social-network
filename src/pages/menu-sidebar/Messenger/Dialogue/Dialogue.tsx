@@ -20,7 +20,7 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 	const {
 		dialogsPage: { dialogs, messages, newDialogueMessage },
 		sendMessage,
-		changeMessage
+		// changeMessage
 	} = props;
 
 	const params = useParams();
@@ -56,21 +56,14 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 		})
 	}
 
-	const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		changeMessage(event.currentTarget.value);
-	}
+	// const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
+	// 	changeMessage(event.currentTarget.value);
+	// }
 
-	const handleSendMessage = () => {
-		sendMessage();
-	}
+	const handleSendMessage = (newDialogueMessage: string) => {
+		sendMessage(newDialogueMessage);
 
-	const onEnter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-		const isEnterPressed = e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
-		if (isEnterPressed) {
-			e.preventDefault();
-			handleSendMessage();
-		}
-	};
+	}
 
 	return (
 		<DialogueContainer>
@@ -84,10 +77,8 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 				{renderMessages()}
 			</MessagesContainer>
 			<MessageSender
-				newDialogueMessage={newDialogueMessage}
-				onChangeMessage={handleChangeMessage}
+				// onChangeMessage={handleChangeMessage}
 				onSendMessage={handleSendMessage}
-				onKeyDown={onEnter}
 			/>
 		</DialogueContainer >
 	)

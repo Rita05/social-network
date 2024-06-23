@@ -17,9 +17,3 @@ export type UsersResponseType = {
 	totalCount: number
 	error: string
 }
-
-export type UserSubscriptionResponseType = {
-	resultCode: number
-	messages: Array<string>
-	data: {}
-}

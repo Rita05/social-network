@@ -25,17 +25,6 @@ export const HeaderComponent = (props: HeaderContainerPropsType) => {
 
 	useEffect(() => {
 		dispatch(getAuthUser());
-		// (async () => {
-		// 	try {
-		// 		const result = await AuthApi.getCurrentUser()
-		// 		if (result.resultCode === 0) {
-		// 			setAuthUser(result.data);
-		// 		}
-		// 	} catch (error) {
-		// 		console.log(error);
-		// 	}
-		// }
-		// )()
 	}, [])
 	return (
 		<Header {...props} />

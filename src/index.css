@@ -1,3 +1,22 @@
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  & > textArea {
+    padding: 0;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
 @font-face {
   font-family: Dancing Script;
   src: 
@@ -16,21 +35,65 @@
   url(./assets/fonts/DancingScript-SemiBold.woff2) format('woff2'),
 }
 
-body {
-  margin: 0;
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  & > textArea {
-    padding: 0;
-  }
+@font-face {
+  font-family: Nunito Sans;
+  src: url(./assets/fonts/NunitoSans_7pt-Light.eot) format('eot'),
+  url(./assets/fonts/NunitoSans_7pt-Light.ttf) format('truetype'),
+  url(./assets/fonts/NunitoSans_7pt-Light.woff2) format('woff2')
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: Nunito;
+  src: url(./assets/fonts/Nunito-ExtraLight.eot) format('eot'),
+  url(./assets/fonts/Nunito-ExtraLight.ttf) format('truetype'),
+  url(./assets/fonts/Nunito-ExtraLight.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: AftaSans;
+  src: url(./assets/fonts/AftaSansThin-Regular.eot) format('eot'),
+  url(./assets/fonts/AftaSansThin-Regular.ttf) format('truetype'),
+  url(./assets/fonts/AftaSansThin-Regular.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url(./assets/fonts/OpenSans-Medium.eot) format('eot'),
+  url(./assets/fonts/OpenSans-Medium.ttf) format('truetype'),
+  url(./assets/fonts/OpenSans-Medium.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(./assets/fonts/Montserrat-Regular.eot) format('eot'),
+  url(./assets/fonts/Montserrat-Regular.ttf) format('truetype'),
+  url(./assets/fonts/Montserrat-Regular.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: Montserrat-Medium;
+  src: url(./assets/fonts/Montserrat-Medium.eot) format('eot'),
+  url(./assets/fonts/Montserrat-Medium.ttf) format('truetype'),
+  url(./assets/fonts/Montserrat-Medium.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: Montserrat-Alternates;
+  src: url(./assets/fonts/MontserratAlternates-Medium.eot) format('eot'),
+  url(./assets/fonts/MontserratAlternates-Medium.ttf) format('truetype'),
+  url(./assets/fonts/MontserratAlternates-Medium.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: Montserrat-Bold;
+  src: url(./assets/fonts/MontserratAlternates-SemiBold.eot) format('eot'),
+  url(./assets/fonts/MontserratAlternates-SemiBold.ttf) format('truetype'),
+  url(./assets/fonts/MontserratAlternates-SemiBold.woff2) format('woff2')
+}
+
+@font-face {
+  font-family: ComicRelief-Bold;
+  src: url(./assets/fonts/ComicRelief-Bold.eot) format('eot'),
+  url(./assets/fonts/ComicRelief-Bold.ttf) format('truetype'),
+  url(./assets/fonts/ComicRelief-Bold.woff2) format('woff2')
 }

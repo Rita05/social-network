@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Dialogue } from "./Dialogue";
 
 //actions
-import { changeDialogueMessageAction, sendMessageAction } from "../../../../models/actions";
+import { sendMessageAction } from "../../../../models/actions";
 
 //types
 import { rootStoreType } from "../../../../models/store";
@@ -18,8 +18,8 @@ type DialogueMapStateToPropsType = {
 }
 
 type DialogueMapDispatchToPropsType = {
-	changeMessage: (message: string) => void
-	sendMessage: () => void
+	// changeMessage: (message: string) => void
+	sendMessage: (newDialogueMessage: string) => void
 }
 
 export type DialogueContainerPropsType = DialogueMapStateToPropsType & DialogueMapDispatchToPropsType;
@@ -32,8 +32,8 @@ const mapStateToProps = (state: rootStoreType): DialogueMapStateToPropsType => {
 
 const mapDispatchToProps = (dispatch: Dispatch): DialogueMapDispatchToPropsType => {
 	return {
-		changeMessage: (message: string) => (dispatch(changeDialogueMessageAction(message))),
-		sendMessage: () => (dispatch(sendMessageAction()))
+		// changeMessage: (message: string) => (dispatch(changeDialogueMessageAction(message))),
+		sendMessage: (newDialogueMessage: string) => (dispatch(sendMessageAction(newDialogueMessage)))
 	}
 }
 

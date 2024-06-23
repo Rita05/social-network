@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.div<{ isAuth: boolean }>`
   display: grid;
   grid-template-rows: 48px 1fr;
   min-height: 100vh;
   row-gap: 16px;
   margin: 0 auto;
   background-color: #edeef0;
+  /* background-color: ${(props) => props.isAuth ? '#fff' : '#edeef0'}; */
 `
 export const MainContent = styled.div`
   display: grid;
