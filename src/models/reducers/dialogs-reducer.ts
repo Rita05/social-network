@@ -10,10 +10,7 @@ import { DialogsPropsType } from "../../types/dialogue";
 export interface DialogsPageType {
 	dialogs: Array<DialogsPropsType>
 	messages: Array<Message>
-	newDialogueMessage: string
 }
-
-// export type DialogsActionsType = СhangeDialogueMessageActionType | SendMessageActionType;
 export type DialogsActionsType = SendMessageActionType;
 
 const initialDialogsState: DialogsPageType = {
@@ -29,25 +26,19 @@ const initialDialogsState: DialogsPageType = {
 		{ id: 3, message: 'как твои дела?', time: '2023-03-29' },
 		{ id: 4, message: 'чем занимаешься?', time: '2022-05-01' }
 	],
-	newDialogueMessage: ''
 }
 
 export const dialogsReducer = (state: DialogsPageType = initialDialogsState, action: DialogsActionsType): DialogsPageType => {
 
 	switch (action.type) {
-		// case 'CHANGE_DIALOGUE_MESSAGE':
-		// 	return {
-		// 		...state,
-		// 		newDialogueMessage: action.newDialogueMessage
-		// 	}
 		case 'SEND_MESSAGE':
 			const newMessage = { id: 6, message: action.newDialogueMessage, time: `${new Date()}` };
 			return {
 				...state,
 				messages: [...state.messages, newMessage],
-				// newDialogueMessage: ''
 			}
 		default:
 			return state;
 	}
 }
+

@@ -27,8 +27,8 @@ import { Preloader } from "../../../elements/ui/preloader/Preloader";
 
 export const Profile = (props: ProfileContainerPropsType) => {
   const {
-    profilePage: { posts, newPostMessage, profile, status },
-    changePostMessage,
+    profilePage: { posts, profile, status },
+    // changePostMessage,
     addPost,
     increasePostLikesCount,
     updateUserProfileStatus
@@ -43,30 +43,30 @@ export const Profile = (props: ProfileContainerPropsType) => {
   const [uploadAvatar, setUploadAvatar] = useState<string | ArrayBuffer | null>(myPhoto);
   const requestStatus = useSelector(getRequestStatus);
 
-  const handleChangePostInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    changePostMessage(event.currentTarget.value);
-  }
+  // const handleChangePostInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  //   changePostMessage(event.currentTarget.value);
+  // }
 
-  const handleAddPost = () => {
-    addPost();
+  const handleAddPost = (newPostMessage: string) => {
+    addPost(newPostMessage);
   }
 
   const handleIncreasePostLikesCount = (postId: number, liked: boolean) => {
     increasePostLikesCount(postId, liked);
   }
 
-  const onEnter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    const isEnterPressed = e.key === 'Enter'
-      && !e.shiftKey
-      && !e.ctrlKey
-      && !e.altKey
-      && !e.metaKey;
+  // const onEnter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  //   const isEnterPressed = e.key === 'Enter'
+  //     && !e.shiftKey
+  //     && !e.ctrlKey
+  //     && !e.altKey
+  //     && !e.metaKey;
 
-    if (isEnterPressed) {
-      e.preventDefault();
-      handleAddPost();
-    }
-  }
+  //   if (isEnterPressed) {
+  //     e.preventDefault();
+  //     handleAddPost();
+  //   }
+  // }
 
   const handleProfileAvatarUpload = (file: UploadInputFile) => {
     if (file && file.type && file.type.startsWith('image')) {
@@ -128,9 +128,9 @@ export const Profile = (props: ProfileContainerPropsType) => {
           <StyledProfileContentPosts>
             <ProfileAddPostForm
               onAddPost={handleAddPost}
-              onChangePostInput={handleChangePostInput}
-              newPostMessage={newPostMessage}
-              onKeyDown={onEnter}
+            // onChangePostInput={handleChangePostInput}
+            // newPostMessage={newPostMessage}
+            // onKeyDown={onEnter}
             />
           </StyledProfileContentPosts>
           {renderProfilePosts()}

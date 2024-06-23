@@ -18,9 +18,8 @@ import { DialogueContainerPropsType } from "./DialogueContainer";
 export const Dialogue = (props: DialogueContainerPropsType) => {
 
 	const {
-		dialogsPage: { dialogs, messages, newDialogueMessage },
+		dialogsPage: { dialogs, messages },
 		sendMessage,
-		// changeMessage
 	} = props;
 
 	const params = useParams();
@@ -56,10 +55,6 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 		})
 	}
 
-	// const handleChangeMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
-	// 	changeMessage(event.currentTarget.value);
-	// }
-
 	const handleSendMessage = (newDialogueMessage: string) => {
 		sendMessage(newDialogueMessage);
 
@@ -77,7 +72,6 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 				{renderMessages()}
 			</MessagesContainer>
 			<MessageSender
-				// onChangeMessage={handleChangeMessage}
 				onSendMessage={handleSendMessage}
 			/>
 		</DialogueContainer >

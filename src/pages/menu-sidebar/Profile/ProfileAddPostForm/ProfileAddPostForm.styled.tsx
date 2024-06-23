@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { theme } from "../../../../styles/Theme";
 
-
 //components
 import { TextArea } from "../../../../elements/ui/textarea/TextArea";
 import { Button } from "../../../../elements/ui/button/Button";
+import { Formik } from "formik";
 
-export const StyledPostForm = styled.div`
+export const StyledPostForm = styled.form`
 	display: flex;
 `
 export const StyledInputAddPost = styled(TextArea)`
+	font-family: Montserrat-Alternates, sans-serif;
 	width: 100%;
 	height: 16px;
 	padding: 7px 12px 9px;

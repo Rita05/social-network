@@ -45,7 +45,7 @@ export interface ITextAreaProps extends Omit<HtmlTextareaProps, 'className' | 'r
 	/**
 	 * Хэндлер изменения текста
 	 */
-	onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void,
+	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void,
 
 	onKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
 }

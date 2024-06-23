@@ -5,7 +5,7 @@ import axios from "axios";
 import { ProfileApi } from "../../api/profile";
 
 //actions 
-import { AddPostActionType, СhangePostMessageActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setRequestStatusAction, SetRequestStatusActionType, SetUserProfileStatusActionType, setUserProfileStatus } from "../actions";
+import { AddPostActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setRequestStatusAction, SetRequestStatusActionType, SetUserProfileStatusActionType, setUserProfileStatus } from "../actions";
 
 //types
 import { PostType } from "../../types/posts";
@@ -21,7 +21,7 @@ export interface ProfilePageType {
 
 export type ProfileActionsType =
 	| AddPostActionType
-	| СhangePostMessageActionType
+	// | СhangePostMessageActionType
 	| СhangePostLikesCountActionType
 	| AddUserProfileActionType
 	| SetRequestStatusActionType
@@ -46,7 +46,7 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 		case 'ADD-POST':
 			let newPost = {
 				id: Math.random(),
-				message: state.newPostMessage,
+				message: action.newPostMessage,
 				likesCount: 0
 			}
 			return {
@@ -54,11 +54,11 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 				posts: [...state.posts, newPost],
 				newPostMessage: ''
 			}
-		case 'CHANGE-POST-MESSAGE':
-			return {
-				...state,
-				newPostMessage: action.postMessage
-			}
+		// case 'CHANGE-POST-MESSAGE':
+		// 	return {
+		// 		...state,
+		// 		newPostMessage: action.postMessage
+		// 	}
 		case 'CHANGE-POST-LIKES-COUNT':
 			return {
 				...state,

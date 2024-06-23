@@ -1,3 +1,4 @@
+import { useFormik } from "formik";
 import { ChangeEvent, KeyboardEvent } from "react"
 
 //styles
@@ -5,33 +6,54 @@ import { StyledButtonAddPost, StyledButtonWrapper, StyledInputAddPost, StyledPos
 
 
 type ProfileAddPostFormPropsType = {
-	newPostMessage: string
-	onChangePostInput: (e: ChangeEvent<HTMLTextAreaElement>) => void
-	onAddPost: () => void
-	onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void
+	// newPostMessage: string
+	// onChangePostInput: (e: ChangeEvent<HTMLTextAreaElement>) => void
+	onAddPost: (newPost: string) => void
+	// onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
 export const ProfileAddPostForm = (props: ProfileAddPostFormPropsType) => {
-	const {
-		onAddPost,
-		onKeyDown,
-		newPostMessage,
-		onChangePostInput
-	} = props;
+	const { onAddPost } = props;
+
+	const formik = useFormik({
+		initialValues: {
+			newPost: '',
+		},
+		onSubmit: (values) => {
+			console.log('values: ', values);
+			onAddPost(values.newPost);
+			formik.resetForm();
+		}
+	});
+
+	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+		const isEnterPressed = e.key === 'Enter'
+			&& !e.shiftKey
+			&& !e.ctrlKey
+			&& !e.altKey
+			&& !e.metaKey;
+
+		if (isEnterPressed) {
+			e.preventDefault();
+			formik.handleSubmit();
+		}
+	}
 
 	return (
-		<StyledPostForm>
+		<StyledPostForm onSubmit={formik.handleSubmit}>
 			<StyledInputAddPost
-				value={newPostMessage}
-				name={'add-post'}
+				name={'newPost'}
+				value={formik.values.newPost}
 				placeholder={"Добавить пост..."}
-				onChange={onChangePostInput}
-				onKeyDown={onKeyDown}
+				onChange={formik.handleChange}
+				// onChange={onChangePostInput}
+				onKeyDown={handleKeyDown}
 			/>
-			<StyledButtonWrapper isDisabled={!newPostMessage}>
+			<StyledButtonWrapper isDisabled={!formik.values.newPost}>
 				<StyledButtonAddPost
-					onClick={onAddPost}
-					isDisabled={!newPostMessage}
+					type={'submit'}
+					// onClick={onAddPost}
+					isDisabled={!formik.values.newPost}
 				>
 					{'Опубликовать'}
 				</StyledButtonAddPost>

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Profile } from "./Profile";
 
 //actions
-import { addPostAction, changePostLikesCountAction, changePostMessageAction } from "../../../models/actions";
+import { addPostAction, changePostLikesCountAction } from "../../../models/actions";
 
 //thunks
 import { getUserProfile, getUserProfileStatus, updateUserProfileStatus } from "../../../models/reducers/profile-reducer";
@@ -24,8 +24,8 @@ type ProfileMapStateToPropsType = {
 }
 
 type ProfilepDispatchToPropsType = {
-  changePostMessage: (newPost: string) => void,
-  addPost: () => void,
+  // changePostMessage: (newPost: string) => void,
+  addPost: (newPostMessage: string) => void,
   increasePostLikesCount: (postId: number, liked: boolean) => void
   getUserProfile: (userId: number) => void
   getUserProfileStatus: (userId: number) => void
@@ -61,8 +61,8 @@ const mapStateToProps = (state: rootStoreType): ProfileMapStateToPropsType => {
 
 const mapDispatchToProps = (dispatch: Dispatch): ProfilepDispatchToPropsType => {
   return {
-    changePostMessage: (newPost: string) => { dispatch(changePostMessageAction(newPost)) },
-    addPost: () => { dispatch(addPostAction()) },
+    // changePostMessage: (newPost: string) => { dispatch(changePostMessageAction(newPost)) },
+    addPost: (newPostMessage: string) => { dispatch(addPostAction(newPostMessage)) },
     increasePostLikesCount: (postId: number, liked: boolean) => { dispatch(changePostLikesCountAction(postId, liked)) },
     getUserProfile,
     getUserProfileStatus,

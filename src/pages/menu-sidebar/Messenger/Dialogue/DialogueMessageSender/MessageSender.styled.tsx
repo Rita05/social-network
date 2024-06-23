@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { theme } from "../../../../../styles/Theme";
 
-
 //components
 import { Button } from "../../../../../elements/ui/button/Button";
 import { Field } from "redux-form";

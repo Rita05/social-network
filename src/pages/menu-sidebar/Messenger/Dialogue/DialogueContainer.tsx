@@ -18,7 +18,6 @@ type DialogueMapStateToPropsType = {
 }
 
 type DialogueMapDispatchToPropsType = {
-	// changeMessage: (message: string) => void
 	sendMessage: (newDialogueMessage: string) => void
 }
 
@@ -32,10 +31,8 @@ const mapStateToProps = (state: rootStoreType): DialogueMapStateToPropsType => {
 
 const mapDispatchToProps = (dispatch: Dispatch): DialogueMapDispatchToPropsType => {
 	return {
-		// changeMessage: (message: string) => (dispatch(changeDialogueMessageAction(message))),
 		sendMessage: (newDialogueMessage: string) => (dispatch(sendMessageAction(newDialogueMessage)))
 	}
 }
-
 
 export const DialogueContainer = compose<ComponentType>(connect(mapStateToProps, mapDispatchToProps))(Dialogue);
