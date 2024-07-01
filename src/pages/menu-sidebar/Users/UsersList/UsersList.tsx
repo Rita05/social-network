@@ -44,7 +44,11 @@ export type UsersPropsType = UsersContainerPropsType & {
 export const UsersList = (props: UsersPropsType) => {
 
 	const {
-		usersPage: { users, totalUsersCount, pageSize, currentPage, portionSize },
+		users,
+		totalUsersCount,
+		pageSize,
+		currentPage,
+		portionSize,
 		followUser,
 		unfollowUser,
 		dragUser,

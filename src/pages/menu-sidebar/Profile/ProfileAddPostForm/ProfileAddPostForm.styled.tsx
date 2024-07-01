@@ -4,19 +4,30 @@ import { theme } from "../../../../styles/Theme";
 //components
 import { TextArea } from "../../../../elements/ui/textarea/TextArea";
 import { Button } from "../../../../elements/ui/button/Button";
-import { Formik } from "formik";
 
 export const StyledPostForm = styled.form`
 	display: flex;
-`
-export const StyledInputAddPost = styled(TextArea)`
-	font-family: Montserrat-Alternates, sans-serif;
 	width: 100%;
+`
+export const StyledInputAddPostWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+`
+
+export const StyledInputAddPost = styled(TextArea) <{ error?: string }>`
+	font-family: Montserrat-Alternates, sans-serif;
 	height: 16px;
 	padding: 7px 12px 9px;
-	border: 1px solid ${theme.colors.border};
+	border: ${props => props.error ? '1.5px solid red' : `1px solid ${theme.colors.border}`};
 	border-radius: 6px;
 `
+export const StyledInputAddPostValidation = styled.span`
+	font-family: OpenSans, sans-serif;
+	font-size: 13px;	
+	color: red;
+`
+
 export const StyledButtonWrapper = styled.div <{ isDisabled: boolean }>`
 	cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
 `

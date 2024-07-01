@@ -17,5 +17,6 @@ export const ContentContainer = styled.div<ContentContainerType>`
 	min-height: ${(props) => props.minHeight || '100vh'};
 	border-radius: ${(props) => props.borderRadius || '12px'};
 	background-color: ${(props) => props.backgroundColor || 'white'};
-	border: 1px solid ${theme.colors.border};
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+	/* border: 1px solid ${theme.colors.border}; */
 `

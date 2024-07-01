@@ -14,7 +14,7 @@ export enum STATUS_CODE {
 
 export type ApiResponseType<T = {}> = {
 	resultCode: 0
-	messages: [],
+	messages: string[],
 	data: T
 }
 

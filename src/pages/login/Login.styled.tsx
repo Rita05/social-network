@@ -1,9 +1,13 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { theme } from "../../styles/Theme";
 
 //components
 import { Button } from "../../elements/ui/button/Button";
 import { Field } from "redux-form";
+
+//styles
+import { FormControlError, FormControlFieldCommonError } from "../../components/FormsControls/FormControl.styled";
+
 
 export const LoginContainer = styled.div`
 	display: grid;
@@ -14,6 +18,7 @@ export const LoginContainer = styled.div`
 	padding: 20px;
 	border-radius: 4px;
 	background-color: #fff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 `
 export const LoginFormContent = styled.div`
 	display: flex;
@@ -53,6 +58,16 @@ export const LoginFormTextField = styled(Field) <{ type?: string }>`
 	border-bottom: 1px solid #dce1e6;
 `
 
+export const LoginFormInputControl = css`
+	flex-direction: column;
+	align-items: flex-start;
+
+	${FormControlError} {
+		font-family: OpenSans, sans-serif;
+		font-size: 13px;
+	}
+`;
+
 export const CheckboxLabel = styled.label`
 	font-family: Montserrat-Alternates, sans-serif;
 	font-size: 15px;
@@ -72,4 +87,10 @@ export const LoginFormButton = styled(Button)`
 	padding: 5px 10px;
 	border-radius: 4px;
 	background-color: ${theme.colors.primary};
+`
+export const LoginFormCommonError = styled.div`
+	font-family: OpenSans, sans-serif;
+	font-size: 14px;
+	color: red;
+	margin-bottom: 10px;
 `

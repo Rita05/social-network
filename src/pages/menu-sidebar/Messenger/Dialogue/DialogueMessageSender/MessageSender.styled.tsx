@@ -1,9 +1,12 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { theme } from "../../../../../styles/Theme";
 
 //components
 import { Button } from "../../../../../elements/ui/button/Button";
 import { Field } from "redux-form";
+
+//styles
+import { FormControlError } from "../../../../../components/FormsControls/FormControl.styled";
 
 export const MessageSenderContainer = styled.div`
   width: 100%;
@@ -16,11 +19,27 @@ export const MessageSenderContent = styled.div`
 	margin-left: 2%;
 	margin-right: 2%;
 `
-export const MessageSenderForm = styled.form`
-	display: flex;
-	width: 100%;
-`
 
+export const AddMessageTextAreaFormControl = css`
+	flex-direction: column;
+	align-items: flex-start;
+
+	${FormControlError} {
+		font-family: OpenSans, sans-serif;
+		font-size: 13px;
+		padding-bottom: 8px;
+	}
+`;
+
+export const MessageSenderForm = styled.form<{ error: boolean }>`
+	width: 100%;
+	display: flex;
+	gap: ${props => props.error ? '15px' : ''};
+
+	& div {
+		width: 100%;
+	}
+`
 export const AddMessageTextArea = styled(Field)`
 	font-family: Montserrat-Alternates, sans-serif;
 	width: 100%;
@@ -29,6 +48,8 @@ export const AddMessageTextArea = styled(Field)`
 	border: 1px solid ${theme.colors.border};
   border-radius: 6px;
 `
+
+
 export const SendMessageButton = styled(Button)`
 	height: 36px;
 	border: none;

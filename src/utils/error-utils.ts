@@ -6,7 +6,6 @@ export const handleServerAppError = <T,>(
     dispatch: Dispatch,
     data: any
 ) => {
-    console.log(data);
     // if (data.messages.length) {
     //     dispatch(setErrorAction(data.messages[0]));
     // } else {

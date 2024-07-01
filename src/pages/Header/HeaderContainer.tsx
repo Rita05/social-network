@@ -6,26 +6,17 @@ import { compose } from 'redux';
 import { Header } from './Header';
 
 //types
-import { AuthUserStateType, getAuthUser } from '../../models/reducers/auth-reducer';
-import { rootStoreType, useAppDispatch } from '../../models/store';
+import { AuthUserStateType } from '../../models/reducers/auth-reducer';
+import { rootStoreType } from '../../models/store';
 
 type HeaderMapStateToPropsType = {
 	auth: AuthUserStateType
 }
 
-type HeaderMapDispatchToPropsType = {
-	getAuthUser: () => void
-}
-
-export type HeaderContainerPropsType = HeaderMapStateToPropsType & HeaderMapDispatchToPropsType;
+export type HeaderContainerPropsType = HeaderMapStateToPropsType;
 
 export const HeaderComponent = (props: HeaderContainerPropsType) => {
 
-	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		dispatch(getAuthUser());
-	}, [])
 	return (
 		<Header {...props} />
 	)
@@ -37,8 +28,5 @@ const mapStateToProps = (state: rootStoreType): HeaderMapStateToPropsType => {
 	}
 }
 
-const mapDispatchToProps: HeaderMapDispatchToPropsType = {
-	getAuthUser
-}
 
-export const HeaderContainer = compose<ComponentType>(connect(mapStateToProps, mapDispatchToProps))(HeaderComponent);
+export const HeaderContainer = compose<ComponentType>(connect(mapStateToProps, {}))(HeaderComponent);

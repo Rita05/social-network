@@ -1,7 +1,7 @@
 import React, { ComponentType, useEffect } from "react";
 import { compose, Dispatch } from "redux";
 import { connect } from "react-redux";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 //components
 import { Profile } from "./Profile";
@@ -19,12 +19,14 @@ import { withAuthRedirect } from "../../../hocs/withAuthRedirect";
 import { rootStoreType, useAppDispatch } from "../../../models/store";
 import { ProfilePageType } from "../../../models/reducers/profile-reducer";
 
+
 type ProfileMapStateToPropsType = {
-  profilePage: ProfilePageType
+  profilePage: ProfilePageType,
+  authorizedUserId: number | null,
+  isAuth: boolean
 }
 
 type ProfilepDispatchToPropsType = {
-  // changePostMessage: (newPost: string) => void,
   addPost: (newPostMessage: string) => void,
   increasePostLikesCount: (postId: number, liked: boolean) => void
   getUserProfile: (userId: number) => void
@@ -35,16 +37,22 @@ type ProfilepDispatchToPropsType = {
 export type ProfileContainerPropsType = ProfileMapStateToPropsType & ProfilepDispatchToPropsType;
 
 const ProfileComponent = (props: ProfileContainerPropsType) => {
-  const { status } = props.profilePage;
-  const { userId } = useParams();
+  const { userId: paramUserId } = useParams();
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const userId = paramUserId ? Number(paramUserId) : props.authorizedUserId;
 
   useEffect(() => {
-    if (userId) {
-      dispatch(getUserProfile(Number(userId)));
-      dispatch(getUserProfileStatus(Number(userId)));
+    if (!userId) {
+      navigate('/login');
+    } else {
+      dispatch(getUserProfile(userId));
+      dispatch(getUserProfileStatus(userId));
+      return;
     }
+
   }, [userId]);
 
   return (
@@ -55,13 +63,14 @@ const ProfileComponent = (props: ProfileContainerPropsType) => {
 
 const mapStateToProps = (state: rootStoreType): ProfileMapStateToPropsType => {
   return {
-    profilePage: state.profilePage
+    profilePage: state.profilePage,
+    authorizedUserId: state.auth.id,
+    isAuth: state.auth.isAuth
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): ProfilepDispatchToPropsType => {
   return {
-    // changePostMessage: (newPost: string) => { dispatch(changePostMessageAction(newPost)) },
     addPost: (newPostMessage: string) => { dispatch(addPostAction(newPostMessage)) },
     increasePostLikesCount: (postId: number, liked: boolean) => { dispatch(changePostLikesCountAction(postId, liked)) },
     getUserProfile,

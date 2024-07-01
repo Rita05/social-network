@@ -1,5 +1,5 @@
 
-import React, { useState, ChangeEvent, KeyboardEvent } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 //selectors
@@ -11,6 +11,7 @@ import { ProfilePost } from "./ProfilePost/ProfilePost";
 import { ProfileInfo } from "./ProfileInfo/ProfileInfo";
 import { ProfileAddPostForm } from "./ProfileAddPostForm/ProfileAddPostForm";
 import { ProfileStatus } from "./ProfileStatus/ProfileStatus";
+import { Preloader } from "../../../elements/ui/preloader/Preloader";
 
 //icons
 import uploadFileImg from '../../../assets/icons/uploadFile.svg';
@@ -22,13 +23,11 @@ import { StyledProfileAvatar, StyledProfileContent, StyledProfileContentPosts, S
 
 //types
 import { ProfileContainerPropsType } from "./ProfileContainer";
-import { Preloader } from "../../../elements/ui/preloader/Preloader";
 
 
 export const Profile = (props: ProfileContainerPropsType) => {
   const {
     profilePage: { posts, profile, status },
-    // changePostMessage,
     addPost,
     increasePostLikesCount,
     updateUserProfileStatus
@@ -43,10 +42,6 @@ export const Profile = (props: ProfileContainerPropsType) => {
   const [uploadAvatar, setUploadAvatar] = useState<string | ArrayBuffer | null>(myPhoto);
   const requestStatus = useSelector(getRequestStatus);
 
-  // const handleChangePostInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
-  //   changePostMessage(event.currentTarget.value);
-  // }
-
   const handleAddPost = (newPostMessage: string) => {
     addPost(newPostMessage);
   }
@@ -54,19 +49,6 @@ export const Profile = (props: ProfileContainerPropsType) => {
   const handleIncreasePostLikesCount = (postId: number, liked: boolean) => {
     increasePostLikesCount(postId, liked);
   }
-
-  // const onEnter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-  //   const isEnterPressed = e.key === 'Enter'
-  //     && !e.shiftKey
-  //     && !e.ctrlKey
-  //     && !e.altKey
-  //     && !e.metaKey;
-
-  //   if (isEnterPressed) {
-  //     e.preventDefault();
-  //     handleAddPost();
-  //   }
-  // }
 
   const handleProfileAvatarUpload = (file: UploadInputFile) => {
     if (file && file.type && file.type.startsWith('image')) {
@@ -128,9 +110,6 @@ export const Profile = (props: ProfileContainerPropsType) => {
           <StyledProfileContentPosts>
             <ProfileAddPostForm
               onAddPost={handleAddPost}
-            // onChangePostInput={handleChangePostInput}
-            // newPostMessage={newPostMessage}
-            // onKeyDown={onEnter}
             />
           </StyledProfileContentPosts>
           {renderProfilePosts()}

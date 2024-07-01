@@ -15,7 +15,6 @@ export const ProfileApi = {
 			.then((response) => response.data)
 	},
 	updateUserProfileStatus: (status: string) => {
-		console.log('status: ', status);
 		return instance.put<ApiResponseType, AxiosResponse<ApiResponseType>>(`/profile/status`, { status })
 			.then((response) => response.data)
 	}

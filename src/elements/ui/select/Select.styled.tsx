@@ -10,7 +10,7 @@ export const StyledText = styled.span`
 	height: 100%;
 `
 export const DropDownArrow = styled.img`
-  position: absolute;
+	position: absolute;
 	right: 0.5rem;
 	top: 50%;
 	transform: translateY(-50%);

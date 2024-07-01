@@ -1,4 +1,5 @@
 import React from 'react';
+import { RuleSet } from 'styled-components';
 
 //icons 
 import spinnerIcon from '../../../assets/icons/spinner.svg';
@@ -7,9 +8,8 @@ import spinnerIcon from '../../../assets/icons/spinner.svg';
 import { PreloaderIcon } from "./Preloader.styled";
 
 type PreloaderPropsType = {
-	className?: string
+	className?: RuleSet<object> | string
 }
-
 
 export const Preloader = (props: PreloaderPropsType) => {
 	const {

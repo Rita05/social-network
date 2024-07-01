@@ -1,6 +1,22 @@
+import { InjectedFormProps, reduxForm, reset, WrappedFieldProps } from "redux-form";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+
+//utils
+import { requiredField } from "../../utils/validators/validators";
+
+//selectors
+import { useAppDispatch } from "../../models/store";
+import { getIsAuthUser } from "../../models/selectors";
+
+//thunks
+import { loginUser } from "../../models/reducers/auth-reducer";
+
+//components
+import { FormControl } from "../../components/FormsControls/FormControl";
+
 //styles
-import { InjectedFormProps, reduxForm } from "redux-form";
-import { CheckboxLabel, LoginContainer, LoginFormButton, LoginFormButtonWrapper, LoginFormContent, LoginFormItem, LoginFormTextField, LoginFormTitle, StyledLoginForm } from "./Login.styled";
+import { CheckboxLabel, LoginContainer, LoginFormButton, LoginFormButtonWrapper, LoginFormCommonError, LoginFormContent, LoginFormInputControl, LoginFormItem, LoginFormTextField, LoginFormTitle, StyledLoginForm } from "./Login.styled";
 
 type LoginFormData = {
 	login: string
@@ -9,9 +25,22 @@ type LoginFormData = {
 }
 
 export const Login = () => {
+
+	const dispatch = useAppDispatch();
+	const isAuth = useSelector(getIsAuthUser);
+
 	const onSubmit = (formData: LoginFormData) => {
-		console.log('formData: ', formData);
+		if (formData) {
+			const { login, password, rememberMe } = formData;
+			dispatch(loginUser(login, password, rememberMe));
+		}
 	}
+
+	if (isAuth) {
+		return <Navigate to={"/profile"} />
+	}
+
+
 	return (
 		<LoginContainer>
 			<LoginFormContent>
@@ -23,21 +52,41 @@ export const Login = () => {
 }
 
 export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
-	const { handleSubmit } = props
+	const { handleSubmit } = props;
+	console.log('props: ', props?.error);
+
+	const InputField = (props: WrappedFieldProps) => {
+		const { input } = props;
+		return (
+			<FormControl
+				styles={LoginFormInputControl}
+				{...props}
+			>
+				<input
+					{...input}
+					{...props}
+				/>
+			</FormControl>
+		)
+	}
+
 	return (
 		<StyledLoginForm onSubmit={handleSubmit}>
 			<LoginFormItem>
 				<LoginFormTextField
-					name={'Login'}
+					name={'login'}
 					placeholder={"Введите имя"}
-					component={"input"}
+					component={InputField}
+					validate={[requiredField]}
 				/>
 			</LoginFormItem>
 			<LoginFormItem>
 				<LoginFormTextField
-					name={'Password'}
+					name={'password'}
+					type="password"
 					placeholder={"Введите пароль"}
-					component={"input"}
+					component={InputField}
+					validate={[requiredField]}
 				/>
 			</LoginFormItem>
 			<LoginFormItem
@@ -45,19 +94,23 @@ export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 			>
 				<CheckboxLabel htmlFor="rememberMe">Сохранить вход</CheckboxLabel>
 				<LoginFormTextField
-					name={'RememberMe'}
-					component={"input"}
+					name={'rememberMe'}
+					component={InputField}
 					type="checkbox"
-					onChange={() => { }}
+				// onChange={() => { }}
 				/>
 			</LoginFormItem>
+			{props.error &&
+				<LoginFormCommonError>
+					{props.error}
+				</LoginFormCommonError>
+			}
 			<LoginFormButtonWrapper>
 				<LoginFormButton>Войти</LoginFormButton>
 			</LoginFormButtonWrapper>
 		</StyledLoginForm>
 	)
 }
-
 
 const LoginReduxForm = reduxForm<LoginFormData>({
 	form: 'Login'

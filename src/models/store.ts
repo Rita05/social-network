@@ -10,6 +10,7 @@ import { sidebarReducer } from "./reducers/sidebar-reducer";
 import { usersReducer } from "./reducers/users-reducer";
 import { authReducer } from "./reducers/auth-reducer";
 import { requestStatusReducer } from "./reducers/requestStatus-reducer";
+import { appReducer } from "./reducers/app-reducer";
 
 //types
 declare global {
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
 	usersPage: usersReducer,
 	auth: authReducer,
 	loader: requestStatusReducer,
-	form: formReducer
+	form: formReducer,
+	app: appReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

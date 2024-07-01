@@ -94,10 +94,9 @@ export const usersReducer = (state: UsersPageType = initialUsersState, action: U
 }
 
 //thunks
-export const getUsers = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<UsersActionsType>) => {
+export const requestUsers = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<UsersActionsType>) => {
 	dispatch(setRequestStatusAction('loading'));
 	dispatch(setCurrentPageAction(currentPage));
-	// this.props.changeCurrentPage(page);
 	try {
 		const data = await UsersApi.getUsers(currentPage, pageSize);
 		dispatch(setRequestStatusAction('succeeded'));

@@ -1,12 +1,18 @@
-import { KeyboardEvent } from "react"
+import { KeyboardEvent } from "react";
 
-//styles
-import { AddMessageTextArea, MessageSenderContainer, MessageSenderContent, MessageSenderForm, SendMessageButton, SendMessageIcon } from "./MessageSender.styled";
+//components
+import { FormControl } from "../../../../../components/FormsControls/FormControl";
 
 //icons
 import sendMessage from '../../../../../assets/icons/send-message.svg';
-import { InjectedFormProps, reduxForm, reset } from "redux-form";
+import { InjectedFormProps, reduxForm, reset, WrappedFieldProps } from "redux-form";
 import { useAppDispatch } from "../../../../../models/store";
+
+//utils
+import { requiredField } from "../../../../../utils/validators/validators";
+
+//styles
+import { AddMessageTextArea, AddMessageTextAreaFormControl, MessageSenderContainer, MessageSenderContent, MessageSenderForm, SendMessageButton, SendMessageIcon } from "./MessageSender.styled";
 
 type MessageSenderPropsType = {
 	onSendMessage: (newDialogueMessage: string) => void
@@ -39,7 +45,7 @@ export const MessageSender = (props: MessageSenderPropsType) => {
 
 
 export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) => {
-	const { handleSubmit } = props;
+	const { handleSubmit, submitFailed } = props;
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		const isEnterPressed = e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
@@ -49,11 +55,27 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 		}
 	};
 
+	const TextAreaField = (props: WrappedFieldProps) => {
+		const { input } = props;
+		return (
+			<FormControl
+				styles={AddMessageTextAreaFormControl}
+				{...props}
+			>
+				<textarea
+					{...input}
+					{...props}
+				/>
+			</FormControl>
+		)
+	}
+
 	return (
-		<MessageSenderForm onSubmit={handleSubmit}>
+		<MessageSenderForm onSubmit={handleSubmit} error={submitFailed}>
 			<AddMessageTextArea
 				name='newDialogueMessage'
-				component='textarea'
+				component={TextAreaField}
+				validate={[requiredField]}
 				placeholder={'Напишите сообщение'}
 				onKeyDown={handleKeyDown}
 			/>

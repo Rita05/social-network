@@ -1,15 +1,18 @@
 import { useFormik } from "formik";
-import { ChangeEvent, KeyboardEvent } from "react"
+import { KeyboardEvent } from "react"
+
+//utils
+import { validateFieldLength } from "../../../../utils/validators/validators";
 
 //styles
-import { StyledButtonAddPost, StyledButtonWrapper, StyledInputAddPost, StyledPostForm } from "./ProfileAddPostForm.styled";
-
+import { StyledButtonAddPost, StyledButtonWrapper, StyledInputAddPost, StyledInputAddPostValidation, StyledInputAddPostWrapper, StyledPostForm } from "./ProfileAddPostForm.styled";
 
 type ProfileAddPostFormPropsType = {
-	// newPostMessage: string
-	// onChangePostInput: (e: ChangeEvent<HTMLTextAreaElement>) => void
 	onAddPost: (newPost: string) => void
-	// onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void
+}
+
+type FormErrorsType = {
+	newPost?: string
 }
 
 export const ProfileAddPostForm = (props: ProfileAddPostFormPropsType) => {
@@ -19,10 +22,19 @@ export const ProfileAddPostForm = (props: ProfileAddPostFormPropsType) => {
 		initialValues: {
 			newPost: '',
 		},
+		validate: (values) => {
+			const errors: FormErrorsType = {};
+			const error = validateFieldLength(30)(values.newPost);
+			if (error) {
+				errors.newPost = error;
+			}
+			return errors;
+		},
 		onSubmit: (values) => {
-			console.log('values: ', values);
-			onAddPost(values.newPost);
-			formik.resetForm();
+			if (formik.errors.newPost === undefined) {
+				onAddPost(values.newPost);
+				formik.resetForm();
+			}
 		}
 	});
 
@@ -41,18 +53,24 @@ export const ProfileAddPostForm = (props: ProfileAddPostFormPropsType) => {
 
 	return (
 		<StyledPostForm onSubmit={formik.handleSubmit}>
-			<StyledInputAddPost
-				name={'newPost'}
-				value={formik.values.newPost}
-				placeholder={"Добавить пост..."}
-				onChange={formik.handleChange}
-				// onChange={onChangePostInput}
-				onKeyDown={handleKeyDown}
-			/>
+			<StyledInputAddPostWrapper>
+				<StyledInputAddPost
+					name={'newPost'}
+					value={formik.values.newPost}
+					placeholder={"Добавить пост..."}
+					onChange={formik.handleChange}
+					onKeyDown={handleKeyDown}
+					error={formik.errors.newPost}
+				/>
+				{formik.touched.newPost && formik.errors?.newPost &&
+					<StyledInputAddPostValidation>
+						{formik.errors?.newPost}
+					</StyledInputAddPostValidation>
+				}
+			</StyledInputAddPostWrapper>
 			<StyledButtonWrapper isDisabled={!formik.values.newPost}>
 				<StyledButtonAddPost
 					type={'submit'}
-					// onClick={onAddPost}
 					isDisabled={!formik.values.newPost}
 				>
 					{'Опубликовать'}

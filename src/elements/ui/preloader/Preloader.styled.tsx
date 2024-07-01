@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
+import styled, { css, RuleSet } from "styled-components";
 
-export const PreloaderIcon = styled.img<{ customStyles?: string }>`
+export const PreloaderIcon = styled.img<{ customStyles?: RuleSet<object> | string }>`
 	margin: 0 auto;
 	width: 100px;
 	height: 100px;

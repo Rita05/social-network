@@ -9,26 +9,30 @@ import { UsersList } from "./UsersList";
 import { withAuthRedirect } from "../../../../hocs/withAuthRedirect";
 
 //actions
-import { dragUserAction, followAction, setCurrentPageAction, unFollowAction } from "../../../../models/actions";
+import { dragUserAction, followAction, unFollowAction } from "../../../../models/actions";
 
-//api
-import { UsersApi } from "../../../../api/users";
+//selectors
+import { getUsers, getCurrentPage, getPageSize, getportionSize, getTotalUsersCount } from "../../../../models/selectors";
 
 //types
 import { rootStoreType } from "../../../../models/store";
-import { getUsers, UsersPageType } from "../../../../models/reducers/users-reducer";
+import { requestUsers, UsersPageType } from "../../../../models/reducers/users-reducer";
 import { User } from "../../../../types/users";
 
 
 type UsersMapStateToPropsType = {
-	usersPage: UsersPageType
+	users: Array<User>
+	pageSize: number
+	currentPage: number
+	portionSize: number
+	totalUsersCount: number
 }
 
 type UsersMapDispatchToPropsType = {
 	followUser: (userId: number) => void
 	unfollowUser: (userId: number) => void
 	dragUser: (users: Array<User>) => void
-	getUsers: (currentPage: number, pageSize: number) => void
+	requestUsers: (currentPage: number, pageSize: number) => void
 }
 
 export type UsersContainerPropsType = UsersMapStateToPropsType & UsersMapDispatchToPropsType;
@@ -44,11 +48,11 @@ export class Users extends Component<UsersContainerPropsType, UsersListState> {
 	}
 
 	componentDidMount() {
-		this.props.getUsers(this.props.usersPage.currentPage, this.props.usersPage.pageSize);
+		this.props.requestUsers(this.props.currentPage, this.props.pageSize);
 	}
 
 	handleChangePage = (page: number) => {
-		this.props.getUsers(page, this.props.usersPage.pageSize);
+		this.props.requestUsers(page, this.props.pageSize);
 	}
 
 	render() {
@@ -65,7 +69,11 @@ export class Users extends Component<UsersContainerPropsType, UsersListState> {
 
 const mapStateToProps = (state: rootStoreType): UsersMapStateToPropsType => {
 	return {
-		usersPage: state.usersPage
+		users: getUsers(state),
+		pageSize: getPageSize(state),
+		currentPage: getCurrentPage(state),
+		portionSize: getportionSize(state),
+		totalUsersCount: getTotalUsersCount(state)
 	}
 }
 
@@ -73,7 +81,7 @@ const mapDispatchToProps: UsersMapDispatchToPropsType = {
 	followUser: followAction,
 	unfollowUser: unFollowAction,
 	dragUser: dragUserAction,
-	getUsers
+	requestUsers
 }
 
 export const UsersContainer = compose<ComponentType>(connect(mapStateToProps, mapDispatchToProps), withAuthRedirect)(Users);

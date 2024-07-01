@@ -8,8 +8,6 @@ const SET_USER_PROFILE_STATUS = 'SET-USER-PROFILE-STATUS';
 
 export type AddPostActionType = ReturnType<typeof addPostAction>;
 
-// export type СhangePostMessageActionType = ReturnType<typeof changePostMessageAction>;
-
 export type СhangePostLikesCountActionType = ReturnType<typeof changePostLikesCountAction>;
 
 export type AddUserProfileActionType = ReturnType<typeof addUserProfileAction>;
@@ -18,9 +16,6 @@ export type SetUserProfileStatusActionType = ReturnType<typeof setUserProfileSta
 
 export const addPostAction = (newPostMessage: string) => ({ type: ADD_POST, newPostMessage }) as const;
 
-// export const changePostMessageAction = (postMessage: string) =>
-//     ({ type: CHANGE_POST_MESSAGE, postMessage }) as const
-
 export const changePostLikesCountAction = (postId: number, liked: boolean) =>
     ({ type: CHANGE_POST_LIKES_COUNT, postId, liked }) as const;
 
@@ -28,3 +23,4 @@ export const addUserProfileAction = (profile: UserProfileType) =>
     ({ type: ADD_USER_PROFILE, profile }) as const;
 
 export const setUserProfileStatus = (status: string) => ({ type: SET_USER_PROFILE_STATUS, status }) as const;
+

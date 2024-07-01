@@ -1,5 +1,4 @@
 import { Dispatch } from "redux";
-import axios from "axios";
 
 //api
 import { ProfileApi } from "../../api/profile";
@@ -21,7 +20,6 @@ export interface ProfilePageType {
 
 export type ProfileActionsType =
 	| AddPostActionType
-	// | СhangePostMessageActionType
 	| СhangePostLikesCountActionType
 	| AddUserProfileActionType
 	| SetRequestStatusActionType
@@ -54,11 +52,6 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 				posts: [...state.posts, newPost],
 				newPostMessage: ''
 			}
-		// case 'CHANGE-POST-MESSAGE':
-		// 	return {
-		// 		...state,
-		// 		newPostMessage: action.postMessage
-		// 	}
 		case 'CHANGE-POST-LIKES-COUNT':
 			return {
 				...state,

@@ -1,11 +1,11 @@
-import { useState, KeyboardEvent, useEffect, useRef } from "react"
+import { useState, KeyboardEvent, useEffect, useRef, ReactNode } from "react"
 import { HtmlDivProps } from "../../../types/html"
 
 //hooks
 import { useOutsideClick } from "../../../hooks/useOutsideClick";
 
 //icons
-import dropDownArrow from '../../../assets/icons/arrow-down.svg';
+import dropDownArrowIcon from '../../../assets/icons/arrow-down.svg';
 
 //styles
 import { DropDownArrow, StyledOption, StyledOptions, StyledSelect, StyledText } from "./Select.styled"
@@ -20,7 +20,7 @@ type DefaultSelectPropsType = Omit<HtmlDivProps, 'style'>
 
 export type SingleSelectValue = SelectOption['value'] | null;
 
-export type SelectOption<TValue = string | number> = {
+export type SelectOption<TValue = string | number | ReactNode> = {
 	/**
 		* Значение опшина
 		*/
@@ -45,6 +45,7 @@ type SelectPropsType = Omit<DefaultSelectPropsType, 'onChange'> & {
 	multiple?: boolean
 	onChange?: (option: SelectOption) => void
 	className?: string
+	dropDownIcon?: string
 }
 
 export const Select = (props: SelectPropsType) => {
@@ -53,6 +54,7 @@ export const Select = (props: SelectPropsType) => {
 		options,
 		className,
 		onChange: onOptionsChange,
+		dropDownIcon,
 		...restProps
 	} = props;
 
@@ -127,7 +129,7 @@ export const Select = (props: SelectPropsType) => {
 				<StyledText onClick={handleDropShow}>
 					{SelectedOption && SelectedOption.value}
 				</StyledText>
-				<DropDownArrow src={dropDownArrow} onClick={handleDropShow} />
+				<DropDownArrow src={dropDownIcon || dropDownArrowIcon} onClick={handleDropShow} />
 				{showDrop &&
 					<StyledOptions>
 						{options?.map((option) => {
