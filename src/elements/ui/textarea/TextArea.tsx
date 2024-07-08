@@ -2,7 +2,7 @@ import { ChangeEvent, forwardRef, useMemo, KeyboardEvent } from 'react'
 import cls from 'classnames'
 
 // types
-import { ClassName, HtmlTextareaProps } from '../../../types/html'
+import { ClassName, HtmlTextareaProps } from '../../../common/types/html'
 
 export type TextAreaVariant = 'default'
 export const textareaVariantOptions: TextAreaVariant[] = ['default']

@@ -1,8 +1,8 @@
 import { useState, KeyboardEvent, useEffect, useRef, ReactNode } from "react"
-import { HtmlDivProps } from "../../../types/html"
+import { HtmlDivProps } from "../../../common/types/html"
 
 //hooks
-import { useOutsideClick } from "../../../hooks/useOutsideClick";
+import { useOutsideClick } from "../../../common/hooks/useOutsideClick";
 
 //icons
 import dropDownArrowIcon from '../../../assets/icons/arrow-down.svg';
