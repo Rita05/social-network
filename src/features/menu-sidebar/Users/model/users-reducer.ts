@@ -58,13 +58,11 @@ export const usersReducer = (state: UsersPageType = initialUsersState, action: U
 			return {
 				...state,
 				users: updateUserFollowStatus<User, 'id'>(state.users, action.userId, 'id', {followed: true})
-				// users: state.users.map((user) => user.id === action.userId ? { ...user, followed: true } : user)
 			}
 		case 'UNFOLLOW-USER':
 			return {
 				...state,
 				users: updateUserFollowStatus<User, 'id'>(state.users, action.userId, 'id', {followed: false})
-				// users: state.users.map((user) => user.id === action.userId ? { ...user, followed: false } : user)
 			}
 		case 'ADD-USERS':
 			return {
@@ -134,29 +132,11 @@ export const toggleFollowUnfollowUser = async(
 }
 
 export const follow = (userId: number) => async (dispatch: Dispatch<UsersActionsType>) => {
-	// dispatch(setIsFollowingInProgressAction(userId, true));
-		const apiMethod = UsersApi.followToUser.bind(UsersApi);
-		toggleFollowUnfollowUser(dispatch, userId, apiMethod, followAction)
-
-		// const response = await apiMethod(userId);
-		// if (response.resultCode === STATUS_CODE.SUCCESS) {
-		// 	dispatch(action(userId));
-		// }
-		// dispatch(setIsFollowingInProgressAction(userId, false));
-
-		// dispatch(setIsFollowingInProgressAction(userId, false));
-
+	const apiMethod = UsersApi.followToUser.bind(UsersApi);
+	toggleFollowUnfollowUser(dispatch, userId, apiMethod, followAction);
 }
 
 export const unFollow = (userId: number) => async (dispatch: Dispatch<UsersActionsType>) => {
-	// dispatch(setIsFollowingInProgressAction(userId, true));
-		const apiMethod = UsersApi.unFollowFromUser.bind(UsersApi);
-		toggleFollowUnfollowUser(dispatch, userId, apiMethod, unFollowAction);
-		// const response = await apiMethod(userId);
-		// if (response.resultCode === STATUS_CODE.SUCCESS) {
-		// 	dispatch(action(userId));
-		// }
-		// dispatch(setIsFollowingInProgressAction(userId, false));
-
-		// dispatch(setIsFollowingInProgressAction(userId, false));
+	const apiMethod = UsersApi.unFollowFromUser.bind(UsersApi);
+	toggleFollowUnfollowUser(dispatch, userId, apiMethod, unFollowAction);
 }

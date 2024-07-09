@@ -1,12 +1,12 @@
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, useState } from "react";
 
 //components
-import { FormControl } from "../../../../../../../common/components/FormsControls/FormControl";
+import { FieldComponent, FormControl } from "../../../../../../../common/components/FormsControls/FormControl";
 
 //icons
 import sendMessage from '../../../../../../../assets/icons/send-message.svg';
-import { InjectedFormProps, reduxForm, reset, WrappedFieldProps } from "redux-form";
-import { useAppDispatch } from "../../../../../../../app/store";
+import { formValueSelector, InjectedFormProps, reduxForm, reset, WrappedFieldProps } from "redux-form";
+import { store, useAppDispatch } from "../../../../../../../app/store";
 
 //utils
 import { requiredField } from "../../../../../../../common/utils/validators/validators";
@@ -45,7 +45,10 @@ export const MessageSender = (props: MessageSenderPropsType) => {
 
 
 export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) => {
-	const { handleSubmit, submitFailed } = props;
+	const { handleSubmit, submitFailed, touch } = props;
+
+	const [senderTouched, setSenderTouched] = useState(false);
+	const selector = formValueSelector('DialogueAddMessageForm');
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		const isEnterPressed = e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
@@ -55,8 +58,10 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 		}
 	};
 
-	const TextAreaField = (props: WrappedFieldProps) => {
-		const { input } = props;
+	const senderFieldError = !!(requiredField(selector(store.getState(), 'login'))) && senderTouched;
+
+	const TextAreaField = (props: WrappedFieldProps & { fieldName: string } & { setLocalTouched: (value: boolean) => void }) => {
+		const { input, fieldName, setLocalTouched } = props;
 		return (
 			<FormControl
 				styles={AddMessageTextAreaFormControl}
@@ -65,20 +70,46 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 				<textarea
 					{...input}
 					{...props}
+					onBlur={(event) => {
+						input.onBlur(event);
+						touch(fieldName);
+						setLocalTouched(true);
+					}}
 				/>
 			</FormControl>
 		)
 	}
 
 	return (
-		<MessageSenderForm onSubmit={handleSubmit} error={submitFailed}>
-			<AddMessageTextArea
+		<MessageSenderForm onSubmit={handleSubmit} error={submitFailed} hasError={senderFieldError}>
+			{/* <AddMessageTextArea
 				name='newDialogueMessage'
 				component={TextAreaField}
 				validate={[requiredField]}
 				placeholder={'Напишите сообщение'}
 				onKeyDown={handleKeyDown}
-			/>
+			/> */}
+			{
+				FieldComponent({
+					name: 'newDialogueMessage',
+					placeholder: "Напишите сообщение",
+					component: (fieldProps) =>
+						<TextAreaField
+							{...fieldProps}
+							fieldName="newDialogueMessage"
+							setLocalTouched={setSenderTouched}
+						/>,
+
+					onKeyDown: () => handleKeyDown,
+					// component: (fieldProps) => <InputField
+					// 	{...fieldProps}
+					// 	fieldName="password"
+					// 	setLocalTouched={setPasswordTouched}
+					// />,
+					validate: [requiredField],
+					styles: AddMessageTextArea
+				})
+			}
 			<SendMessageButton type='submit'>
 				<SendMessageIcon src={sendMessage} />
 			</SendMessageButton>

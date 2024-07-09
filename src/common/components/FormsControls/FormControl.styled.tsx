@@ -6,20 +6,17 @@ export const FormControlContainer = styled.div<{ styles?: RuleSet<object> | stri
 	align-items: center;
 	${props => props?.error && props.styles};
 	& input {
-		border-bottom: ${props => props?.error ? '1.5px solid red' : ''}
+		border-bottom: ${props => props?.error ? '1.5px solid red' : ''} !important;
 	}
 	& textarea {
-		border: ${props => props?.error ? '1.5px solid red' : ''}
-	}
+	border: ${props => props?.error ? '1.5px solid red' : ''} !important;
+}
 `
 export const FormControlError = styled.span<{ styles?: RuleSet<object> | string }>`
 	${props => props.styles};
 	color: red;
 `
-export const FormControlFieldCommonError = styled.div`
-	color: red;
-`
 
-export const StyledField = styled(Field) <{ styles?: any }>`
+export const StyledField = styled(Field) <{ styles?: RuleSet<object> | string }>`
 	${props => props.styles};
 `

@@ -1,12 +1,12 @@
-import { InjectedFormProps, reduxForm, reset, WrappedFieldProps } from "redux-form";
-import { useSelector } from "react-redux";
+import { formValueSelector, getFormSyncErrors, InjectedFormProps, reduxForm, WrappedFieldProps, getFormMeta, WrappedFieldMetaProps, touch } from "redux-form";
+import { connect, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 //utils
 import { requiredField } from "../../../common/utils/validators/validators";
 
 //selectors
-import { useAppDispatch } from "../../../app/store";
+import { store, useAppDispatch } from "../../../app/store";
 import { getIsAuthUser } from "../../../models/selectors";
 
 //thunks
@@ -17,12 +17,28 @@ import { FieldComponent, FormControl } from "../../../common/components/FormsCon
 
 //styles
 import { CheckboxLabel, LoginContainer, LoginFormButton, LoginFormButtonWrapper, LoginFormCommonError, LoginFormContent, LoginFormInputControl, LoginFormItem, LoginFormTextField, LoginFormTitle, StyledLoginForm } from "./Login.styled";
+import { useState } from "react";
 
 type LoginFormData = {
 	login: string
 	password: string
 	rememberMe: boolean
 }
+
+type LoginFormMeta = {
+	login?: {
+		touched?: boolean;
+		error?: string;
+	};
+	password?: {
+		touched?: boolean;
+		error?: string;
+	};
+	rememberMe?: {
+		touched?: boolean;
+		error?: string;
+	};
+};
 
 export const Login = () => {
 
@@ -51,10 +67,36 @@ export const Login = () => {
 }
 
 export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
-	const { handleSubmit } = props;
+	const { handleSubmit, touch } = props;
+	// console.log('props: ', props);
+	// console.log('props: ', props);
+	// console.log('valid: ', valid);
 
-	const InputField = (props: WrappedFieldProps) => {
-		const { input } = props;
+	const selector = formValueSelector('Login');
+	// const formMeta = getFormMeta<LoginFormData>('Login')(store.getState());
+
+	// const loginFieldTouched = formMeta?.login?.touched;
+	// const passwordFieldTouched = formMeta?.password?.touched;
+	// const formMeta = getFormMeta('Login')(store.getState().form);
+	const [loginTouched, setLoginTouched] = useState(false);
+	const [passwordTouched, setPasswordTouched] = useState(false);
+	const formErrors = getFormSyncErrors('Login')(store.getState());
+	// const loginFieldTouched = formMeta && formMeta?.login?.touched;
+	// const passwordFieldTouched = formMeta && formMeta?.password?.touched;
+	// const touchedFields = touch(...Object.keys(formErrors));
+	// console.log('touchedFields: ', touchedFields);
+	const formMeta = getFormMeta('Login')(store.getState()) as LoginFormMeta;
+
+	const loginFieldTouched = formMeta?.login?.touched;
+	const passwordFieldTouched = formMeta?.password?.touched;
+
+	const loginFieldError = !!(requiredField(selector(store.getState(), 'login'))) && loginTouched;
+	// console.log('loginFieldError: ', loginFieldError);
+	const passwordFieldError = !!(requiredField(selector(store.getState(), 'password'))) && passwordTouched;
+	// console.log('passwordFieldError: ', passwordFieldError);
+
+	const InputField = (props: WrappedFieldProps & { fieldName: string } & { setLocalTouched: (value: boolean) => void }) => {
+		const { input, fieldName, setLocalTouched } = props;
 		return (
 			<FormControl
 				styles={LoginFormInputControl}
@@ -63,6 +105,11 @@ export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 				<input
 					{...input}
 					{...props}
+					onBlur={(event) => {
+						input.onBlur(event);
+						touch(fieldName);
+						setLocalTouched(true);
+					}}
 				/>
 			</FormControl>
 		)
@@ -70,39 +117,36 @@ export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 
 	return (
 		<StyledLoginForm onSubmit={handleSubmit}>
-			<LoginFormItem>
-				{/* <LoginFormTextField
-				name={'login'}
-				placeholder={"Введите имя"}
-				component={InputField}
-				validate={[requiredField]}
-			/> */}
+			<LoginFormItem hasError={loginFieldError}>
 				{
 					FieldComponent({
 						name: 'login',
 						placeholder: "Введите имя",
-						component: InputField,
+						component: (fieldProps) =>
+							<InputField
+								{...fieldProps}
+								fieldName="login"
+								setLocalTouched={setLoginTouched}
+							/>,
 						validate: [requiredField],
 						styles: LoginFormTextField
 					})
 				}
 			</LoginFormItem>
-			<LoginFormItem>
+			<LoginFormItem hasError={passwordFieldError}>
 				{FieldComponent({
 					name: 'password',
 					type: 'password',
 					placeholder: "Введите пароль",
-					component: InputField,
+					component: (fieldProps) =>
+						<InputField
+							{...fieldProps}
+							fieldName="password"
+							setLocalTouched={setPasswordTouched}
+						/>,
 					validate: [requiredField],
 					styles: LoginFormTextField
 				})}
-				{/* <LoginFormTextField
-				name={'password'}
-				type={'password'}
-				placeholder={"Введите пароль"}
-				component={InputField}
-				validate={[requiredField]}
-			/> */}
 			</LoginFormItem>
 			<LoginFormItem
 				type='checkbox'
@@ -111,14 +155,15 @@ export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 				{FieldComponent({
 					name: 'rememberMe',
 					type: "checkbox",
-					component: InputField,
+					component: (fieldProps) =>
+						<InputField
+							{...fieldProps}
+							fieldName="rememberMe"
+							setLocalTouched={() => { }}
+						/>,
+					// component: InputField,
 					styles: LoginFormTextField
 				})}
-				{/* <LoginFormTextField
-					name={'rememberMe'}
-					component={InputField}
-					type="checkbox"
-				/> */}
 			</LoginFormItem>
 			{props.error &&
 				<LoginFormCommonError>
@@ -134,4 +179,6 @@ export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 
 const LoginReduxForm = reduxForm<LoginFormData>({
 	form: 'Login'
-})(LoginForm)
+})(LoginForm);
+
+

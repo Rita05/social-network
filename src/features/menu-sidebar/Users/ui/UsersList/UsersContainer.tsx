@@ -48,11 +48,13 @@ export class Users extends Component<UsersContainerPropsType, UsersListState> {
 	}
 
 	componentDidMount() {
-		this.props.requestUsers(this.props.currentPage, this.props.pageSize);
+		const { currentPage, pageSize } = this.props;
+		this.props.requestUsers(currentPage, pageSize);
 	}
 
 	handleChangePage = (page: number) => {
-		this.props.requestUsers(page, this.props.pageSize);
+		const { pageSize } = this.props;
+		this.props.requestUsers(page, pageSize);
 	}
 
 	render() {

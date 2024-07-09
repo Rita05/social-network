@@ -3,12 +3,9 @@ import { theme } from "../../../styles/Theme";
 
 //components
 import { Button } from "../../../elements/ui/button/Button";
-import { Field } from "redux-form";
 
 //styles
 import { FormControlError } from "../../../common/components/FormsControls/FormControl.styled";
-import { FieldComponent } from "../../../common/components/FormsControls/FormControl";
-
 
 export const LoginContainer = styled.div`
 	display: grid;
@@ -31,6 +28,8 @@ export const LoginFormContent = styled.div`
 
 export const StyledLoginForm = styled.form`
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 	box-sizing: border-box;
 `;
 
@@ -39,35 +38,44 @@ export const LoginFormTitle = styled.h1`
 	margin-top: 16px;
 	margin-bottom: 20px;
 `
-export const LoginFormItem = styled.div<{ type?: string }>`
-	display: ${props => props?.type === 'checkbox' ? 'flex' : ''};
-	gap: ${props => props?.type === 'checkbox' ? '5px' : ''};
-  margin-bottom: 12px;
-	&:last-child: {
-		margin-bottom: none;
-	}
-`;
 
 export const LoginFormTextField = css<{ type?: string }>`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 	width: ${props => (props.type === 'checkbox' ? '15px' : '100%')};
-	height: ${props => (props.type === 'checkbox' ? '15px' : '16px')};
+	height: ${props => (props.type === 'checkbox' ? '15px' : '')};
 	cursor: ${props => (props.type === 'checkbox' ? 'pointer' : '')};
 	font-family: Montserrat-Medium, sans-serif;
 	font-size: 15px;
-	padding: 7px 0 9px 0;
 	border: none;
-	border-bottom: 1px solid #dce1e6;
-`
-
-export const LoginFormInputControl = css`
-	flex-direction: column;
-	align-items: flex-start;
 
 	${FormControlError} {
 		font-family: OpenSans, sans-serif;
 		font-size: 13px;
 	}
+`
+
+export const LoginFormItem = styled.div<{ type?: string, hasError?: boolean }>`
+	& input {
+		border-bottom: 1px solid #dce1e6;
+		height: ${props => props.hasError ? '30px' : ''};
+		padding: ${props => props.hasError ? '0' : '7px 0 9px 0'};
+	}
+	margin-bottom: ${props => props.hasError ? '18px' : '16px'};
+	display: flex;
+	flex-direction: ${props => props?.type === 'checkbox' ? 'row' : 'column'};
+	gap: ${props => props?.type === 'checkbox' ? '5px' : ''};
+	&:last-child: {
+		margin-bottom: none;
+	}
 `;
+
+export const LoginFormInputControl = css`
+	flex-direction: column;
+	align-items: flex-start;
+`;
+
 
 export const CheckboxLabel = styled.label`
 	font-family: Montserrat-Alternates, sans-serif;

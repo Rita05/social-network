@@ -1,4 +1,4 @@
-import { ComponentType, ReactNode } from "react";
+import { ComponentType, ReactNode, KeyboardEvent } from "react";
 import { Field, Validator, WrappedFieldProps } from "redux-form";
 import { RuleSet } from "styled-components";
 
@@ -10,14 +10,14 @@ type FormControlProps = WrappedFieldProps & {
 	styles?: RuleSet<object> | string
 };
 
-export const FormControl = ({ input, meta, children, ...props }: FormControlProps) => {
+export const FormControl = ({ input, meta: { touched, error }, children, ...props }: FormControlProps) => {
 	const { styles } = props;
-	const hasError = meta.touched && meta.error;
+	const hasError = touched && error;
 
 	return (
 		<FormControlContainer styles={styles} error={hasError}>
 			{children}
-			{hasError && <FormControlError>{meta.error}</FormControlError>}
+			{hasError && <FormControlError>{error}</FormControlError>}
 		</FormControlContainer>
 	)
 }
@@ -27,8 +27,9 @@ type FieldComponentProps = {
 	type?: string;
 	placeholder?: string;
 	component?: ComponentType<WrappedFieldProps>;
+	onKeyDown?: (e: KeyboardEvent<HTMLElement>) => void;
 	validate?: Validator | Validator[];
-	styles?: any
+	styles?: RuleSet<object> | string
 }
 
 
@@ -39,8 +40,10 @@ export const FieldComponent = (props: FieldComponentProps) => {
 		placeholder,
 		component,
 		validate,
-		styles
+		styles,
+		onKeyDown
 	} = props;
+
 	return (
 		<StyledField
 			name={name}
@@ -48,6 +51,7 @@ export const FieldComponent = (props: FieldComponentProps) => {
 			placeholder={placeholder}
 			component={component}
 			validate={validate}
+			onKeyDown={onKeyDown}
 			styles={styles}
 		/>
 	)
