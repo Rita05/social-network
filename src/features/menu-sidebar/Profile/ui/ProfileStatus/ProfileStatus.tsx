@@ -25,6 +25,7 @@ export const ProfileStatus = (props: ProfileStatusPropsType) => {
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
+    updateProfileStatus(status);
   }
 
   const handleBlur = () => {

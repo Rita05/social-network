@@ -5,17 +5,17 @@ import { App } from './app/App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 
 
 ReactDOM.render(
-  // <React.StrictMode>
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter >,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <HashRouter basename={process.env.PUBLIC_URL}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HashRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

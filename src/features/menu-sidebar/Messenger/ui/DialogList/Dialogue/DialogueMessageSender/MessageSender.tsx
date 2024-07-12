@@ -1,4 +1,4 @@
-import { KeyboardEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useState } from "react";
 
 //components
 import { FieldComponent, FormControl } from "../../../../../../../common/components/FormsControls/FormControl";
@@ -50,7 +50,7 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 	const [senderTouched, setSenderTouched] = useState(false);
 	const selector = formValueSelector('DialogueAddMessageForm');
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+	const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
 		const isEnterPressed = e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey;
 		if (isEnterPressed) {
 			e.preventDefault();
@@ -58,9 +58,19 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 		}
 	};
 
-	const senderFieldError = !!(requiredField(selector(store.getState(), 'login'))) && senderTouched;
+	const senderFieldError = !!(requiredField(selector(store.getState(), 'newDialogueMessage'))) && senderTouched;
 
-	const TextAreaField = (props: WrappedFieldProps & { fieldName: string } & { setLocalTouched: (value: boolean) => void }) => {
+	const handleSubmitForm = (event: FormEvent<HTMLFormElement>) => {
+		handleSubmit(event);
+		setSenderTouched(false);
+	}
+
+
+	const TextAreaField = (
+		props: WrappedFieldProps
+			& { fieldName: string }
+			& { setLocalTouched: (value: boolean) => void }
+	) => {
 		const { input, fieldName, setLocalTouched } = props;
 		return (
 			<FormControl
@@ -81,14 +91,10 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 	}
 
 	return (
-		<MessageSenderForm onSubmit={handleSubmit} error={submitFailed} hasError={senderFieldError}>
-			{/* <AddMessageTextArea
-				name='newDialogueMessage'
-				component={TextAreaField}
-				validate={[requiredField]}
-				placeholder={'Напишите сообщение'}
-				onKeyDown={handleKeyDown}
-			/> */}
+		<MessageSenderForm
+			onSubmit={(event: FormEvent<HTMLFormElement>) => handleSubmitForm(event)}
+			error={submitFailed}
+			hasError={senderFieldError}>
 			{
 				FieldComponent({
 					name: 'newDialogueMessage',
@@ -100,12 +106,7 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 							setLocalTouched={setSenderTouched}
 						/>,
 
-					onKeyDown: () => handleKeyDown,
-					// component: (fieldProps) => <InputField
-					// 	{...fieldProps}
-					// 	fieldName="password"
-					// 	setLocalTouched={setPasswordTouched}
-					// />,
+					onKeyDown: (event: KeyboardEvent<HTMLElement>) => handleKeyDown(event),
 					validate: [requiredField],
 					styles: AddMessageTextArea
 				})

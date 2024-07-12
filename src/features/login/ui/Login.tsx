@@ -25,21 +25,6 @@ type LoginFormData = {
 	rememberMe: boolean
 }
 
-type LoginFormMeta = {
-	login?: {
-		touched?: boolean;
-		error?: string;
-	};
-	password?: {
-		touched?: boolean;
-		error?: string;
-	};
-	rememberMe?: {
-		touched?: boolean;
-		error?: string;
-	};
-};
-
 export const Login = () => {
 
 	const dispatch = useAppDispatch();
@@ -68,32 +53,14 @@ export const Login = () => {
 
 export const LoginForm = (props: InjectedFormProps<LoginFormData>) => {
 	const { handleSubmit, touch } = props;
-	// console.log('props: ', props);
-	// console.log('props: ', props);
-	// console.log('valid: ', valid);
 
 	const selector = formValueSelector('Login');
-	// const formMeta = getFormMeta<LoginFormData>('Login')(store.getState());
-
-	// const loginFieldTouched = formMeta?.login?.touched;
-	// const passwordFieldTouched = formMeta?.password?.touched;
-	// const formMeta = getFormMeta('Login')(store.getState().form);
 	const [loginTouched, setLoginTouched] = useState(false);
 	const [passwordTouched, setPasswordTouched] = useState(false);
-	const formErrors = getFormSyncErrors('Login')(store.getState());
-	// const loginFieldTouched = formMeta && formMeta?.login?.touched;
-	// const passwordFieldTouched = formMeta && formMeta?.password?.touched;
-	// const touchedFields = touch(...Object.keys(formErrors));
-	// console.log('touchedFields: ', touchedFields);
-	const formMeta = getFormMeta('Login')(store.getState()) as LoginFormMeta;
-
-	const loginFieldTouched = formMeta?.login?.touched;
-	const passwordFieldTouched = formMeta?.password?.touched;
+	const formMeta = getFormMeta('Login')(store.getState());
 
 	const loginFieldError = !!(requiredField(selector(store.getState(), 'login'))) && loginTouched;
-	// console.log('loginFieldError: ', loginFieldError);
 	const passwordFieldError = !!(requiredField(selector(store.getState(), 'password'))) && passwordTouched;
-	// console.log('passwordFieldError: ', passwordFieldError);
 
 	const InputField = (props: WrappedFieldProps & { fieldName: string } & { setLocalTouched: (value: boolean) => void }) => {
 		const { input, fieldName, setLocalTouched } = props;

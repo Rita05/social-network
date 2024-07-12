@@ -2,7 +2,6 @@ import React, { useParams } from "react-router";
 import { ChangeEvent, KeyboardEvent } from "react";
 
 //components
-import { Error } from '../../../../../errors/ui/Error';
 import { DialogueHeader } from "./DialogueHeader/DialogueHeader";
 import { MessageSender } from "./DialogueMessageSender/MessageSender";
 import { Message } from "./DialogueMessage/Message";

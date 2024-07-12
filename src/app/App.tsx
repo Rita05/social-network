@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -20,7 +20,7 @@ import { MessengerWithAuthRedirect } from '../features/menu-sidebar/Messenger/Me
 import { ProfileContainer } from '../features/menu-sidebar/Profile/ui/ProfileContainer';
 import { DialogueContainer } from '../features/menu-sidebar/Messenger/ui/DialogList/Dialogue/DialogueContainer';
 import { UsersContainer } from '../features/menu-sidebar/Users/ui/UsersList/UsersContainer';
-import { Error } from '../features/errors/ui/Error';
+import { ErrorPage } from '../features/errors/ui/ErrorPage';
 import { HeaderContainer } from '../features/header/ui/HeaderContainer';
 import { Login } from '../features/login/ui/Login';
 import { Preloader } from '../elements/ui/preloader/Preloader';
@@ -28,7 +28,7 @@ import { Preloader } from '../elements/ui/preloader/Preloader';
 //styles
 import { AppPreloader, Container, MainContent } from './App.styled';
 
-const PATH = {
+export const PATH = {
   BASEURL: '/',
   PROFILE: '/profile',
   MESSAGES: '/messages',
@@ -39,9 +39,9 @@ const PATH = {
 } as const
 
 export const App = () => {
-  const ProfileWithSuspense = WithSuspense(ProfileContainer);
-  const DialogueWithSuspense = WithSuspense(DialogueContainer);
-  const UsersWithSuspense = WithSuspense(UsersContainer);
+  const ProfileWithSuspense = WithSuspense(lazy(() => import('../features/menu-sidebar/Profile/ui/ProfileContainer').then(module => ({ default: module.ProfileContainer }))));
+  const DialogueWithSuspense = WithSuspense(lazy(() => import('../features/menu-sidebar/Messenger/ui/DialogList/Dialogue/DialogueContainer').then(module => ({ default: module.DialogueContainer }))));
+  const UsersWithSuspense = WithSuspense(lazy(() => import('../features/menu-sidebar/Users/ui/UsersList/UsersContainer').then(module => ({ default: module.UsersContainer }))));
   const HeaderWithSuspense = WithSuspense(HeaderContainer);
 
   const isAuth = useSelector(getIsAuthUser);
@@ -59,32 +59,33 @@ export const App = () => {
 
   return (
     <Container isAuth={true}>
-      <HeaderWithSuspense />
-      <MainContent isAuth={isAuth}>
-        {isAuth && <MenuSideBar />}
-        <Routes>
-          <Route path={PATH.BASEURL} element={<Navigate to={PATH.PROFILE} />} />
-          <Route
-            path={PATH.PROFILE}
-            element={<ProfileWithSuspense />} />
-          <Route
-            path={`${PATH.PROFILE}/:userId?`}
-            element={<ProfileWithSuspense />}
-          />
-          <Route
-            path={`${PATH.MESSAGES}/:id`}
-            element={<DialogueWithSuspense />}
-          />
-          <Route path={PATH.MESSAGES} element={<MessengerWithAuthRedirect />} />
-          <Route path={PATH.USERS} element={<UsersWithSuspense />} />
-          <Route path={PATH.AUTH} element={<Login />} />
-          <Route path={"/*"} element={<Error message={'Not found'} />} />
-          <Route path={`${PATH.MESSAGES}/*`} element={<Error message={'Not found'} />} />
-          {/* <Route path={PATH.ERROR} element={<Error />} />
+      <Suspense fallback={<Preloader />}>
+        <HeaderWithSuspense />
+        <MainContent isAuth={isAuth}>
+          {isAuth && <MenuSideBar />}
+          <Routes>
+            <Route path={PATH.BASEURL} element={<Navigate to={PATH.PROFILE} />} />
+            <Route
+              path={PATH.PROFILE}
+              element={<ProfileWithSuspense />} />
+            <Route
+              path={`${PATH.PROFILE}/:userId?`}
+              element={<ProfileWithSuspense />}
+            />
+            <Route
+              path={`${PATH.MESSAGES}/:id`}
+              element={<DialogueWithSuspense />}
+            />
+            <Route path={PATH.MESSAGES} element={<MessengerWithAuthRedirect />} />
+            <Route path={PATH.USERS} element={<UsersWithSuspense />} />
+            <Route path={PATH.AUTH} element={<Login />} />
+            <Route path={"/*"} element={<ErrorPage />} />
+            <Route path={`${PATH.MESSAGES}/*`} element={<ErrorPage />} />
+            {/* <Route path={PATH.ERROR} element={<Error />} />
           <Route path={"/*"} element={<Navigate to={PATH.ERROR} />} /> */}
-        </Routes>
-      </MainContent>
-      {/* )} */}
+          </Routes>
+        </MainContent>
+      </Suspense>
     </Container>
   );
 }
