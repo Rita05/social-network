@@ -1,23 +1,24 @@
-//types
 import { AnyAction, Dispatch } from "redux";
 import { rootStoreType } from "../store";
 
 //selectors
-import { getAuthUser } from "../../features/login/model/auth-reducer";
+import { getAuthUser } from "../../features/login/model/auth-reducer";import { handleServerNetworkError } from "../../common/utils/error-utils";
 
 //types
-import { setInitializedAction, SetInitializedActionActionType } from "./app-actions";
+import { SetAppErrorActionType, setInitializedAction, SetInitializedActionActionType } from "./app-actions";
 import { ThunkDispatch } from "redux-thunk";
 
 type AppInitialState = {
 	initialized: boolean
+	errors: string | string[]
 }
 
 const initialAppState = {
-	initialized: false
+	initialized: false,
+	errors: []
 }
 
-export type AppActionsType = SetInitializedActionActionType;
+export type AppActionsType = SetInitializedActionActionType | SetAppErrorActionType;
 
 export const appReducer = (state: AppInitialState = initialAppState, action: AppActionsType) => {
 
@@ -27,6 +28,8 @@ export const appReducer = (state: AppInitialState = initialAppState, action: App
 				...state,
 				initialized: action.payload
 			}
+			case 'SET-ERROR':
+				return { ...state, errors: action.errors }
 		default:
 			return state;
 	}
@@ -39,6 +42,6 @@ export const initializeApp = () => (dispatch: ThunkDispatch<rootStoreType, unkno
 			dispatch(setInitializedAction(true));
 		})
 		.catch((error) => {
-			console.log('error: ', error);
+			handleServerNetworkError(error as Error, dispatch);
 		})
 }

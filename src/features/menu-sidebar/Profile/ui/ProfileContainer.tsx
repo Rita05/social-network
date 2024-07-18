@@ -10,7 +10,7 @@ import { Profile } from "./Profile";
 import { addPostAction, changePostLikesCountAction } from "../../../../models/actions";
 
 //thunks
-import { getUserProfile, getUserProfileStatus, updateUserProfileStatus } from "../model/profile-reducer";
+import { getUserProfile, getUserProfileStatus, updateUserProfile, updateUserProfileStatus, uploadProfileAvatar } from "../model/profile-reducer";
 
 //hoc
 import { withAuthRedirect } from "../../../../common/hocs/withAuthRedirect";
@@ -18,6 +18,7 @@ import { withAuthRedirect } from "../../../../common/hocs/withAuthRedirect";
 //types
 import { rootStoreType, useAppDispatch } from "../../../../app/store";
 import { ProfilePageType } from "../model/profile-reducer";
+import { UserProfileType } from "../../../../common/types/profile";
 
 
 type ProfileMapStateToPropsType = {
@@ -32,6 +33,8 @@ type ProfilepDispatchToPropsType = {
   getUserProfile: (userId: number) => void
   getUserProfileStatus: (userId: number) => void
   updateUserProfileStatus: (status: string) => void
+  uploadProfileAvatar: (file: File) => void
+  updateUserProfile: (profile: Omit<UserProfileType, 'photos'>) => void
 }
 
 export type ProfileContainerPropsType = ProfileMapStateToPropsType & ProfilepDispatchToPropsType;
@@ -75,7 +78,9 @@ const mapDispatchToProps = (dispatch: Dispatch): ProfilepDispatchToPropsType => 
     increasePostLikesCount: (postId: number, liked: boolean) => { dispatch(changePostLikesCountAction(postId, liked)) },
     getUserProfile,
     getUserProfileStatus,
-    updateUserProfileStatus
+    updateUserProfileStatus,
+    uploadProfileAvatar,
+    updateUserProfile
   }
 }
 

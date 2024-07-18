@@ -1,10 +1,12 @@
 import { UserProfileType } from "../../../../common/types/profile";
+import { UserPhotoType } from "../../../../common/types/users";
 
 const ADD_POST = 'ADD-POST';
 const CHANGE_POST_MESSAGE = 'CHANGE-POST-MESSAGE';
 const CHANGE_POST_LIKES_COUNT = 'CHANGE-POST-LIKES-COUNT';
 const ADD_USER_PROFILE = 'ADD-USER-PROFILE';
 const SET_USER_PROFILE_STATUS = 'SET-USER-PROFILE-STATUS';
+const SET_USER_PROFILE_AVATAR = 'SET-USER-PROFILE-AVATAR';
 const DELETE_PROFILE_POST = 'DELETE-PROFILE-POST';
 
 export type AddPostActionType = ReturnType<typeof addPostAction>;
@@ -17,6 +19,9 @@ export type SetUserProfileStatusActionType = ReturnType<typeof setUserProfileSta
 
 export type DeleteProfilePostActionType = ReturnType<typeof deleteProfilePost>;
 
+export type SetUserProfileAvatarActionType = ReturnType<typeof setUserProfileAvatar>;
+
+
 export const addPostAction = (newPostMessage: string) => ({ type: ADD_POST, newPostMessage }) as const;
 
 export const changePostLikesCountAction = (postId: number, liked: boolean) =>
@@ -26,5 +31,7 @@ export const addUserProfileAction = (profile: UserProfileType) =>
     ({ type: ADD_USER_PROFILE, profile }) as const;
 
 export const setUserProfileStatus = (status: string) => ({ type: SET_USER_PROFILE_STATUS, status }) as const;
+
+export const setUserProfileAvatar = (photos: UserPhotoType) => ({type: SET_USER_PROFILE_AVATAR, photos}) as const;
 
 export const deleteProfilePost = (postId: number) => ({ type: DELETE_PROFILE_POST, postId }) as const;

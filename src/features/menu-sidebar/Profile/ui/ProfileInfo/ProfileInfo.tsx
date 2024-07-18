@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
+import { MouseEvent } from 'react';
 
-//selectors
+//model
 import { getUserProfile } from '../../model/profile-selectors';
 import { getRequestStatus } from '../../../../../models/selectors';
 
 //icons
-import editProfileImg from '../../../../../assets/icons/edit-profile.svg';
 import fullNameImg from '../../../../../assets/icons/full-name.svg';
 import aboutImg from '../../../../../assets/icons/about.svg';
 import jobImg from '../../../../../assets/icons/job.svg';
@@ -17,31 +17,30 @@ import instagramImg from '../../../../../assets/icons/instagram.svg';
 import twitterImg from '../../../../../assets/icons/twitter.svg';
 import youtubeImg from '../../../../../assets/icons/youtube.svg';
 import searchJobImg from '../../../../../assets/icons/search-job.svg';
-
+import editProfileImg from '../../../../../assets/icons/edit-profile.svg';
 
 //components
 import ProfileInfoItem from './ProfileInfoItem';
 import { Preloader } from '../../../../../elements/ui/preloader/Preloader';
-
+import { ProfileInfoTitle } from '../ProfileInfoTitle/ProfileInfoTitle';
 
 //styles
-import { StyledEditProfileButton, StyledEditProfile, StyledEditProfileImg, StyledEditProfileTitle, StyledProfileContent, StyledProfileInfo, StyledProfileInfoItemIcon, StyledProfileInfoItem, StyledProfileInfoItemDescription, StyledProfileInfoItemTitle, StyledProfileInfoItemContactsContent, StyledProfileInfoItemContactsLink } from "./ProfileInfo.styled"
+import { StyledProfileContent, StyledProfileInfoItemIcon, StyledProfileInfoItem, StyledProfileInfoItemTitle, StyledProfileInfoItemContactsContent, StyledProfileInfoItemContactsLink, StyledEditProfileButton, StyledEditProfileImg } from "./ProfileInfo.styled";
 
-type ProfileInfo = {
-
+type Props = {
+	isOwner: boolean
+	goToEditMode: (event: MouseEvent<HTMLButtonElement>) => void
 }
 
-export const ProfileInfo = (props: ProfileInfo) => {
-
+export const ProfileInfo = (props: Props) => {
+	const { isOwner, goToEditMode } = props;
 	const profile = useSelector(getUserProfile);
 	const {
-		userId,
 		aboutMe,
 		lookingForAJob,
 		lookingForAJobDescription,
 		fullName,
 		contacts
-		// contacts: { github, vk, facebook, twitter, website, youtube, mainLink },
 	} = profile;
 
 	const requestStatus = useSelector(getRequestStatus);
@@ -92,16 +91,15 @@ export const ProfileInfo = (props: ProfileInfo) => {
 	}
 
 	return (
-		<StyledProfileInfo>
-			<StyledEditProfile>
-				<StyledEditProfileTitle>
-					{'Информация о профиле'}
-				</StyledEditProfileTitle>
-				<StyledEditProfileButton>
-					<StyledEditProfileImg src={editProfileImg} />
-				</StyledEditProfileButton>
-			</StyledEditProfile>
+		<>
 			<StyledProfileContent>
+				<ProfileInfoTitle>
+					{isOwner &&
+						<StyledEditProfileButton onClick={goToEditMode}>
+							<StyledEditProfileImg src={editProfileImg} />
+						</StyledEditProfileButton>
+					}
+				</ProfileInfoTitle>
 				{requestStatus === 'loading' ? <Preloader /> : (
 					<>
 						{
@@ -126,6 +124,6 @@ export const ProfileInfo = (props: ProfileInfo) => {
 					</>
 				)}
 			</StyledProfileContent>
-		</StyledProfileInfo >
+		</ >
 	)
 }

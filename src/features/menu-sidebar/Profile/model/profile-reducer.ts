@@ -1,15 +1,22 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+
+//utils
+import { handleServerAppError, handleServerNetworkError } from "../../../../common/utils/error-utils";
 
 //api
 import { ProfileApi } from "../api";
 
 //actions 
-import { AddPostActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setRequestStatusAction, SetRequestStatusActionType, SetUserProfileStatusActionType, setUserProfileStatus, DeleteProfilePostActionType } from "../../../../models/actions";
+import { AddPostActionType, СhangePostLikesCountActionType, AddUserProfileActionType, addUserProfileAction, setRequestStatusAction, SetRequestStatusActionType, SetUserProfileStatusActionType, setUserProfileStatus, DeleteProfilePostActionType, SetUserProfileAvatarActionType, setUserProfileAvatar } from "../../../../models/actions";
 
 //types
 import { PostType } from "../../../../common/types/posts";
 import { UserProfileType } from "../../../../common/types/profile";
 import { ErrorType, STATUS_CODE } from "../../../../common/api/common-api";
+import { rootStoreType } from "../../../../app/store";
+import { SetAppErrorActionType } from "../../../../app/model/app-actions";
+
 
 export interface ProfilePageType {
 	posts: Array<PostType>
@@ -26,6 +33,8 @@ export type ProfileActionsType =
 	| SetRequestStatusActionType
 	| SetUserProfileStatusActionType
 	| DeleteProfilePostActionType
+	| SetUserProfileAvatarActionType
+	| SetAppErrorActionType 
 
 
 const initialProfileState: ProfilePageType = {
@@ -73,6 +82,11 @@ export const profileReducer = (state: ProfilePageType = initialProfileState, act
 				...state,
 				status: action.status
 			}
+		case 'SET-USER-PROFILE-AVATAR': 
+			return {
+				...state,
+				profile: {...state.profile, photos: action.photos}
+			}
 		case 'DELETE-PROFILE-POST':
 			return {
 				...state,
@@ -91,7 +105,7 @@ export const getUserProfile = (userId: number) => async (dispatch: Dispatch<Prof
 		dispatch(setRequestStatusAction('succeeded'));
 		dispatch(addUserProfileAction(data));
 	} catch (error) {
-		dispatch(setRequestStatusAction('failed'));
+		handleServerNetworkError(error as Error, dispatch);
 	}
 }
 
@@ -102,7 +116,7 @@ export const getUserProfileStatus = (userId: number) => async (dispatch: Dispatc
 		dispatch(setRequestStatusAction('succeeded'));
 		dispatch(setUserProfileStatus(response));
 	} catch (error) {
-		dispatch(setRequestStatusAction('failed'));
+		handleServerNetworkError(error as Error, dispatch);
 	}
 }
 
@@ -115,6 +129,40 @@ export const updateUserProfileStatus = (status: string) => async (dispatch: Disp
 			dispatch(setRequestStatusAction('succeeded'));
 		}
 	} catch (error) {
-		dispatch(setRequestStatusAction('failed'));
+		handleServerNetworkError(error as Error, dispatch);
+	}
+}
+
+export const uploadProfileAvatar = (file: File) => async(dispatch: Dispatch<ProfileActionsType>) => {
+	dispatch(setRequestStatusAction('loading'));
+	try {
+		const response = await ProfileApi.updateUserProfileAvatar(file);
+		if (response.resultCode === STATUS_CODE.SUCCESS) {
+			dispatch(setUserProfileAvatar(response.data.data.photos));
+			dispatch(setRequestStatusAction('succeeded'));
+		}
+	} catch (error) {
+		handleServerNetworkError(error as Error, dispatch);
+	}
+}
+
+export const updateUserProfile = (profile: Omit<UserProfileType, 'photos'>) => async(dispatch: ThunkDispatch<rootStoreType, unknown, AnyAction> , getState: () => rootStoreType) => {
+	const userId= getState().auth.id;
+	dispatch(setRequestStatusAction('loading'));
+	try {
+		const response = await ProfileApi.updateUserProfile(profile);
+		if (response.resultCode === STATUS_CODE.SUCCESS) {
+			dispatch(setRequestStatusAction('succeeded'));
+			if(userId) {
+				dispatch(getUserProfile(userId));
+			}
+		} else {
+			handleServerAppError(dispatch, response);
+			return Promise.reject(response.messages);
+		}
+		return response;
+	} catch (error) {
+		handleServerNetworkError(error as Error, dispatch);
+		return Promise.reject(error);
 	}
 }

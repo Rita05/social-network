@@ -46,7 +46,7 @@ export const ProfileStatus = (props: ProfileStatusPropsType) => {
             <UserStatusText
               onDoubleClick={toggleEditMode}
             >
-              {status || ''}
+              {status || 'нет статуса'}
             </UserStatusText>
           )
           : (

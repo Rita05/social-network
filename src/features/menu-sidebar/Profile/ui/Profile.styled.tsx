@@ -85,3 +85,13 @@ export const StyledProfileContentPosts = styled(ContentContainer)`
 	min-height: fit-content;
 	padding: 20px;
 `
+
+export const StyledProfileInfo = styled(ContentContainer)`
+	width: auto;
+	height: auto;
+	min-height: fit-content;
+	padding: 20px;
+`
+
+
+

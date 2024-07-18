@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps, MouseEvent, ReactNode } from "react"
+import { ButtonHTMLAttributes, DetailedHTMLProps } from "react"
 
 //styles
 import { StyledButton } from "./Button.styled"

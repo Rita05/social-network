@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 //store
@@ -17,9 +17,6 @@ import { initializeApp } from './model/app-reducer';
 //components
 import { MenuSideBar } from '../features/menu-sidebar/MenuSideBar';
 import { MessengerWithAuthRedirect } from '../features/menu-sidebar/Messenger/Messenger';
-import { ProfileContainer } from '../features/menu-sidebar/Profile/ui/ProfileContainer';
-import { DialogueContainer } from '../features/menu-sidebar/Messenger/ui/DialogList/Dialogue/DialogueContainer';
-import { UsersContainer } from '../features/menu-sidebar/Users/ui/UsersList/UsersContainer';
 import { ErrorPage } from '../features/errors/ui/ErrorPage';
 import { HeaderContainer } from '../features/header/ui/HeaderContainer';
 import { Login } from '../features/login/ui/Login';
@@ -81,8 +78,6 @@ export const App = () => {
             <Route path={PATH.AUTH} element={<Login />} />
             <Route path={"/*"} element={<ErrorPage />} />
             <Route path={`${PATH.MESSAGES}/*`} element={<ErrorPage />} />
-            {/* <Route path={PATH.ERROR} element={<Error />} />
-          <Route path={"/*"} element={<Navigate to={PATH.ERROR} />} /> */}
           </Routes>
         </MainContent>
       </Suspense>

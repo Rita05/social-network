@@ -10,6 +10,7 @@ type InputPropsType = {
 	onBlur?: (event: FocusEvent<HTMLInputElement>) => void
 	autoFocus?: boolean
 	type?: string
+	name?: string
 }
 
 export const Input = (props: InputPropsType) => {
@@ -22,10 +23,12 @@ export const Input = (props: InputPropsType) => {
 		onChange,
 		onKeyUp,
 		onBlur,
+		name,
 		autoFocus
 	} = props;
 	return (
 		<input
+			name={name}
 			type={type}
 			className={className}
 			placeholder={placeholder}

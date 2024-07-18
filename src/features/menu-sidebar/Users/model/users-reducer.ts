@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 
 //utils
 import { updateUserFollowStatus } from "../../../../common/utils/updateUserFollowStatus";
+import { handleServerNetworkError } from "../../../../common/utils/error-utils";
 
 //actions
 import { addUsersAction, AddUsersActionType, DragUsersActionType, followAction, FollowUserActionType, setCurrentPageAction, SetCurrentPageActionType, setIsFollowingInProgressAction, SetIsFollowingInProgressActionType, setTotalUsersCountAction, SetTotalUsersCountActionType, unFollowAction, UnFollowUserActionType } from "./users-actions";
@@ -13,6 +14,7 @@ import { ApiResponseType, STATUS_CODE } from "../../../../common/api/common-api"
 //types
 import { User } from "../../../../common/types/users";
 import { setRequestStatusAction, SetRequestStatusActionType } from "../../../../models/actions/requestStatus-actions";
+import { SetAppErrorActionType } from "../../../../app/model/app-actions";
 
 export type UsersPageType = {
 	users: Array<User>
@@ -32,6 +34,7 @@ export type UsersActionsType =
 	| SetTotalUsersCountActionType
 	| SetRequestStatusActionType
 	| SetIsFollowingInProgressActionType
+	| SetAppErrorActionType 
 
 // let initialUsersState: UsersPageType = {
 // 	users: [
@@ -106,8 +109,7 @@ export const requestUsers = (currentPage: number, pageSize: number) => async (di
 		dispatch(addUsersAction(data.items));
 		dispatch(setTotalUsersCountAction(data.totalCount));
 	} catch (error) {
-		dispatch(setRequestStatusAction('failed'));
-		console.log(error);
+		handleServerNetworkError(error as Error, dispatch);
 	}
 }
 
@@ -124,7 +126,7 @@ export const toggleFollowUnfollowUser = async(
 			dispatch(action(userId));
 		}
 	} catch (error) {
-		console.log(error);
+		handleServerNetworkError(error as Error, dispatch);
 	}
 	finally {
 		dispatch(setIsFollowingInProgressAction(userId, false));

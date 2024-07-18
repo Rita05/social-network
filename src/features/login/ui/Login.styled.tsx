@@ -12,7 +12,8 @@ export const LoginContainer = styled.div`
 	align-items: center;
 	justify-self: center;
 	width: 320px;
-	height: 320px;
+	min-height: 320px;
+	height: fit-content;
 	padding: 20px;
 	border-radius: 4px;
 	background-color: #fff;
@@ -32,6 +33,12 @@ export const StyledLoginForm = styled.form`
 	flex-direction: column;
 	box-sizing: border-box;
 `;
+
+export const LoginFormIcon = styled.img`
+	width: 75px;
+	height: 75px;
+	object-fit: cover;
+`
 
 export const LoginFormTitle = styled.h1`
 	font-family: ComicRelief-Bold, sans-serif;
@@ -56,11 +63,12 @@ export const LoginFormTextField = css<{ type?: string }>`
 	}
 `
 
-export const LoginFormItem = styled.div<{ type?: string, hasError?: boolean }>`
+export const LoginFormItem = styled.div<{ type?: string, hasError?: boolean, name?: string }>`
 	& input {
-		border-bottom: 1px solid #dce1e6;
 		height: ${props => props.hasError ? '30px' : ''};
 		padding: ${props => props.hasError ? '0' : '7px 0 9px 0'};
+		border: ${props => props.name === 'captcha' ? '1px solid #dce1e6' : ''} !important;
+		${props => (!props.name || props.name !== 'captcha') && `border-bottom: 1px solid #dce1e6;`}
 	}
 	margin-bottom: ${props => props.hasError ? '18px' : '16px'};
 	display: flex;
@@ -102,4 +110,10 @@ export const LoginFormCommonError = styled.div`
 	font-size: 14px;
 	color: red;
 	margin-bottom: 10px;
+`
+
+export const CaptchaImage = styled.img`
+	object-fit: cover;
+	width: fit-content;
+	height: 80px;
 `

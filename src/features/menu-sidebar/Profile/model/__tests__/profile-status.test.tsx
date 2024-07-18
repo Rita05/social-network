@@ -51,7 +51,6 @@ describe('ProfileStatus component', () => {
 
 			const instance = component.root;
 			const statusElement = instance.findByType('span');
-			console.log('statusElement: ', statusElement);
 			expect(statusElement.children[0]).toBe('some status');
 
 		} catch (error) {
