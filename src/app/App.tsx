@@ -29,6 +29,7 @@ export const PATH = {
   BASEURL: '/',
   PROFILE: '/profile',
   MESSAGES: '/messages',
+  // CHAT: '/chat',
   SETTINGS: '/settings',
   ERROR: '/error',
   USERS: '/users',
@@ -70,10 +71,14 @@ export const App = () => {
               element={<ProfileWithSuspense />}
             />
             <Route
-              path={`${PATH.MESSAGES}/:id`}
+              path={PATH.MESSAGES}
               element={<DialogueWithSuspense />}
             />
-            <Route path={PATH.MESSAGES} element={<MessengerWithAuthRedirect />} />
+            {/* <Route
+              path={`${PATH.MESSAGES}/:id`}
+              element={<DialogueWithSuspense />}
+            /> */}
+            {/* <Route path={PATH.MESSAGES} element={<MessengerWithAuthRedirect />} /> */}
             <Route path={PATH.USERS} element={<UsersWithSuspense />} />
             <Route path={PATH.AUTH} element={<Login />} />
             <Route path={"/*"} element={<ErrorPage />} />

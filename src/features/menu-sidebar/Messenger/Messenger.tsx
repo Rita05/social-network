@@ -22,5 +22,4 @@ const Messenger = () => {
 	)
 }
 export const MessengerWithAuthRedirect = Messenger;
-// export const MessengerWithAuthRedirect = withAuthRedirect(Messenger);
 

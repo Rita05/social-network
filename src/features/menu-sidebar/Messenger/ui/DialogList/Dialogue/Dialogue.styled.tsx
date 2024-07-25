@@ -18,6 +18,7 @@ export const MessagesContainer = styled.div`
   overflow-y: auto;
 	display: flex;
 	flex-direction: column;
+	padding-top: 63px;
 `
 
 export const MessagesGroup = styled.div`

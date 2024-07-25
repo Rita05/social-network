@@ -48,11 +48,13 @@ export const UsersList = (props: UsersPropsType) => {
 		totalUsersCount,
 		pageSize,
 		currentPage,
+		portionNumber,
 		portionSize,
 		followUser,
 		unfollowUser,
 		dragUser,
 		onChangePage,
+		changePortionNumber,
 	} = props;
 
 	const [selectedUsersStatus, setSelectedUsersStatus] = useState('');
@@ -94,6 +96,10 @@ export const UsersList = (props: UsersPropsType) => {
 		}
 	}
 
+	const handleChangePortionNumber = (portionNumber: number) => {
+		changePortionNumber(portionNumber);
+	}
+
 	const renderPagination = () => {
 		if (users.length === 0 || users === null) {
 			return;
@@ -102,9 +108,11 @@ export const UsersList = (props: UsersPropsType) => {
 			<Pagination
 				pageSize={pageSize}
 				currentPage={currentPage}
+				portionNumber={portionNumber}
 				portionSize={portionSize}
 				totalPages={totalUsersCount}
 				onChange={onChangePage}
+				handleChangePortionNumber={handleChangePortionNumber}
 			/>
 		)
 	}

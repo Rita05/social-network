@@ -69,20 +69,6 @@ export const Profile = (props: ProfileContainerPropsType) => {
     setEditMode(!editMode);
   }
 
-  const handleSubmit = (formData: Omit<UserProfileType, 'photos'>) => {
-    // const handleSubmit = (formData: any) => {
-    const updatedContacts = Object.entries(formData.contacts).reduce((acc, [key, value]) => {
-      (acc as any)[key] = value === '' ? null : value;
-      return acc;
-    }, {} as UserContactsType);
-
-    dispatch(updateUserProfile({
-      ...formData,
-      contacts: updatedContacts
-    }))
-
-  }
-
   const renderProfilePosts = () => {
     return (
       posts.map((post) => {

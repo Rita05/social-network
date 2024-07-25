@@ -1,25 +1,25 @@
 
+//icons
+import defaultAvatar from '../../../../../../../assets/icons/default-avatar.svg';
+
 //styles
 import { MessageContent, MessageContainer, SenderMessageAvatar, SenderMessageName, MessageBlock, MessageText } from "./Message.styled";
 
+//types
+import { ChatMessage } from "../../../../../../../common/types/messages";
 
-type MessagePropsType = {
-	userName: string
-	message: string
-	photo: string
-}
-
-export const Message = (props: MessagePropsType) => {
+export const Message = (props: ChatMessage) => {
 	const {
 		userName,
 		message,
 		photo
 	} = props;
+
 	return (
 		<MessageContainer>
 			<MessageContent>
 				<SenderMessageAvatar
-					src={`${photo || ''}`}
+					src={`${photo || defaultAvatar}`}
 				/>
 				<MessageBlock>
 					<SenderMessageName>

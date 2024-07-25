@@ -9,10 +9,10 @@ import { UsersList } from "./UsersList";
 import { withAuthRedirect } from "../../../../../common/hocs/withAuthRedirect";
 
 //actions
-import { dragUserAction, followAction, unFollowAction } from "../../../../../models/actions";
+import { dragUserAction, followAction, unFollowAction, setPortionNumberAction } from "../../../../../models/actions";
 
 //selectors
-import { getUsers, getCurrentPage, getPageSize, getportionSize, getTotalUsersCount } from "../../../../../models/selectors";
+import { getUsers, getCurrentPage, getPageSize, getportionSize, getTotalUsersCount, gePortionNumber } from "../../../../../models/selectors";
 
 //types
 import { rootStoreType } from "../../../../../app/store";
@@ -25,6 +25,7 @@ type UsersMapStateToPropsType = {
 	pageSize: number
 	currentPage: number
 	portionSize: number
+	portionNumber: number
 	totalUsersCount: number
 }
 
@@ -32,6 +33,7 @@ type UsersMapDispatchToPropsType = {
 	followUser: (userId: number) => void
 	unfollowUser: (userId: number) => void
 	dragUser: (users: Array<User>) => void
+	changePortionNumber: (portionNumber: number) => void
 	requestUsers: (currentPage: number, pageSize: number) => void
 }
 
@@ -75,7 +77,8 @@ const mapStateToProps = (state: rootStoreType): UsersMapStateToPropsType => {
 		pageSize: getPageSize(state),
 		currentPage: getCurrentPage(state),
 		portionSize: getportionSize(state),
-		totalUsersCount: getTotalUsersCount(state)
+		totalUsersCount: getTotalUsersCount(state),
+		portionNumber: gePortionNumber(state)
 	}
 }
 
@@ -83,6 +86,7 @@ const mapDispatchToProps: UsersMapDispatchToPropsType = {
 	followUser: followAction,
 	unfollowUser: unFollowAction,
 	dragUser: dragUserAction,
+	changePortionNumber: setPortionNumberAction,
 	requestUsers
 }
 

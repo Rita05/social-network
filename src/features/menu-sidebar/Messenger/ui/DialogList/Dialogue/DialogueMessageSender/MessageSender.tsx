@@ -1,4 +1,4 @@
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useState } from "react";
 
 //components
 import { FieldComponent, FormControl } from "../../../../../../../common/components/FormsControls/FormControl";
@@ -15,15 +15,32 @@ import { requiredField } from "../../../../../../../common/utils/validators/vali
 import { AddMessageTextArea, AddMessageTextAreaFormControl, MessageSenderContainer, MessageSenderContent, MessageSenderForm, SendMessageButton, SendMessageIcon } from "./MessageSender.styled";
 
 type MessageSenderPropsType = {
+	wsChanel: WebSocket | null
 	onSendMessage: (newDialogueMessage: string) => void
+	isDisabled: boolean
+	setReadyStatus: (status: "pending" | "ready") => void
 }
 
 type MessageSenderFormData = {
 	newDialogueMessage: string
 }
 
+type AddMessageFormProps = InjectedFormProps<MessageSenderFormData, { isDisabled: boolean }> & { isDisabled: boolean }
+
 export const MessageSender = (props: MessageSenderPropsType) => {
-	const { onSendMessage } = props;
+	const { onSendMessage, isDisabled, wsChanel, setReadyStatus } = props;
+
+	useEffect(() => {
+		const handleOpenConnection = () => {
+			setReadyStatus('ready');
+		}
+		wsChanel?.addEventListener('open', handleOpenConnection)
+
+		//если в props пришел новый wsChanel, то делаем отписку для старого, размонтирование
+		return () => {
+			wsChanel?.removeEventListener('open', handleOpenConnection)
+		}
+	}, [wsChanel])
 
 	const dispatch = useAppDispatch();
 
@@ -37,15 +54,15 @@ export const MessageSender = (props: MessageSenderPropsType) => {
 			<MessageSenderContent>
 				<AddMessageFormRedux
 					onSubmit={handleSendMessage}
+					isDisabled={isDisabled}
 				/>
 			</MessageSenderContent>
 		</MessageSenderContainer>
 	)
 }
 
-
-export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) => {
-	const { handleSubmit, submitFailed, touch } = props;
+export const AddMessageForm = (props: AddMessageFormProps) => {
+	const { handleSubmit, submitFailed, touch, isDisabled } = props;
 
 	const [senderTouched, setSenderTouched] = useState(false);
 	const selector = formValueSelector('DialogueAddMessageForm');
@@ -64,7 +81,6 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 		handleSubmit(event);
 		setSenderTouched(false);
 	}
-
 
 	const TextAreaField = (
 		props: WrappedFieldProps
@@ -111,13 +127,13 @@ export const AddMessageForm = (props: InjectedFormProps<MessageSenderFormData>) 
 					styles: AddMessageTextArea
 				})
 			}
-			<SendMessageButton type='submit'>
+			<SendMessageButton type='submit' disabled={isDisabled}>
 				<SendMessageIcon src={sendMessage} />
 			</SendMessageButton>
 		</MessageSenderForm>
 	)
 }
 
-const AddMessageFormRedux = reduxForm<MessageSenderFormData>({
+const AddMessageFormRedux = reduxForm<MessageSenderFormData, { isDisabled: boolean }>({
 	form: 'DialogueAddMessageForm'
 })(AddMessageForm)

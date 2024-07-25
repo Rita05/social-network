@@ -1,51 +1,106 @@
 import React, { useParams } from "react-router";
-import { ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 //components
 import { DialogueHeader } from "./DialogueHeader/DialogueHeader";
 import { MessageSender } from "./DialogueMessageSender/MessageSender";
 import { Message } from "./DialogueMessage/Message";
+import { FriendMessage } from "./DialogueFriendMessage/FriendMessage";
+
+//models
+import { getAuthUserId } from "../../../../../login/model/auth-selectors";
+import { getMessages, stopReceiveMessages } from "../../../model/dialogs-reducer";
 
 //styles
 import { DialogueContainer, MessagesContainer, MessagesGroup } from "./Dialogue.styled";
 
 //types
 import { DialogsPropsType } from "../../../../../../common/types/dialogue";
-import { FriendMessage } from "./DialogueFriendMessage/FriendMessage";
 import { DialogueContainerPropsType } from "./DialogueContainer";
+import { ChatMessage } from "../../../../../../common/types/messages";
 
 export const Dialogue = (props: DialogueContainerPropsType) => {
 
 	const {
-		dialogsPage: { dialogs, messages },
+		dialogsPage: { dialogs },
 		sendMessage,
 	} = props;
 
+	const id = useSelector(getAuthUserId);
 	const params = useParams();
 	const currentDialogue = dialogs.find((user: DialogsPropsType) => user.id === Number(params.id));
 
-	const renderMessages = () => {
-		if (!currentDialogue) {
-			return null
-		}
+	const [messages, setMessages] = useState<ChatMessage[]>([]);
+	console.log('messages: ', messages);
+	const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending');
+	const [wsChanel, setWebSocket] = useState<WebSocket | null>(null);
 
-		return messages.map((m: any) => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getMessages());
+		return () => {
+			dispatch(stopReceiveMessages());
+		}
+	}, [])
+
+	// useEffect(() => {
+	// 	let ws: WebSocket;
+
+	// 	const handleCloseConnection = () => {
+	// 		setTimeout(createWsChanel, 3000);
+	// 	}
+
+	// 	const createWsChanel = () => {
+	// 		//если было старое соединение перед созданием нового - к примеру после разрыва соединения через 3 секунды
+	// 		ws?.removeEventListener('close', handleCloseConnection);
+	// 		ws?.close();
+	// 		ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
+	// 		ws?.addEventListener('close', handleCloseConnection);
+	// 		setWebSocket(ws);
+	// 	}
+
+
+	// 	createWsChanel();
+
+	// 	return () => {
+	// 		ws?.removeEventListener('close', handleCloseConnection);
+	// 		ws.close();
+	// 	}
+	// }, [])
+
+
+	useEffect(() => {
+		const handleSendMessage = (event: MessageEvent) => {
+			setMessages((prevMessages) => [...prevMessages, ...JSON.parse(event.data)]);
+		}
+		wsChanel?.addEventListener('message', handleSendMessage);
+
+		//cleanup функция
+		return () => {
+			wsChanel?.removeEventListener('message', handleSendMessage);
+		}
+	}, [wsChanel]);
+
+	const renderMessages = () => {
+		// if (!currentDialogue) {
+		// 	return null
+		// }
+
+		return messages?.map((message: ChatMessage) => {
 			return (
-				<MessagesGroup key={m.id}>
+				<MessagesGroup key={message.userId}>
 					{
-						m.id % 2 !== 0 ? (
+						message.userId === id ? (
 							<Message
-								key={m.id}
-								userName={'Маргарита Таранова'}
-								message={m.message}
-								photo={''}
+								key={message.userId}
+								{...message}
 							/>
 						) : (
-							< FriendMessage
-								key={m.id}
-								userName={'Дмитрий Таранов'}
-								message={m.message}
-								photo={''}
+							<FriendMessage
+								key={message.userId}
+								{...message}
 							/>
 						)
 					}
@@ -54,9 +109,15 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 		})
 	}
 
-	const handleSendMessage = (newDialogueMessage: string) => {
-		sendMessage(newDialogueMessage);
+	// const handleSendMessage = (newDialogueMessage: string) => {
+	// 	sendMessage(newDialogueMessage);
+	// }
 
+	const handleSendMessage = (newDialogueMessage: string) => {
+		if (!newDialogueMessage) {
+			return;
+		}
+		wsChanel?.send(newDialogueMessage);
 	}
 
 	return (
@@ -71,7 +132,10 @@ export const Dialogue = (props: DialogueContainerPropsType) => {
 				{renderMessages()}
 			</MessagesContainer>
 			<MessageSender
+				wsChanel={wsChanel}
+				setReadyStatus={setReadyStatus}
 				onSendMessage={handleSendMessage}
+				isDisabled={wsChanel === null || readyStatus !== 'ready'}
 			/>
 		</DialogueContainer >
 	)

@@ -5,7 +5,7 @@ import { updateUserFollowStatus } from "../../../../common/utils/updateUserFollo
 import { handleServerNetworkError } from "../../../../common/utils/error-utils";
 
 //actions
-import { addUsersAction, AddUsersActionType, DragUsersActionType, followAction, FollowUserActionType, setCurrentPageAction, SetCurrentPageActionType, setIsFollowingInProgressAction, SetIsFollowingInProgressActionType, setTotalUsersCountAction, SetTotalUsersCountActionType, unFollowAction, UnFollowUserActionType } from "./users-actions";
+import { addUsersAction, AddUsersActionType, DragUsersActionType, followAction, FollowUserActionType, setCurrentPageAction, SetCurrentPageActionType, setIsFollowingInProgressAction, SetIsFollowingInProgressActionType, SetPortionNumberActionType, setTotalUsersCountAction, SetTotalUsersCountActionType, unFollowAction, UnFollowUserActionType } from "./users-actions";
 
 //api
 import { UsersApi } from "../api";
@@ -22,6 +22,7 @@ export type UsersPageType = {
 	currentPage: number
 	totalUsersCount: number
 	portionSize: number
+	portionNumber: number
 	followingInProgress: Array<number>
 }
 
@@ -35,6 +36,7 @@ export type UsersActionsType =
 	| SetRequestStatusActionType
 	| SetIsFollowingInProgressActionType
 	| SetAppErrorActionType 
+	|	SetPortionNumberActionType
 
 // let initialUsersState: UsersPageType = {
 // 	users: [
@@ -51,6 +53,7 @@ const initialUsersState: UsersPageType = {
 	currentPage: 1,
 	totalUsersCount: 0,
 	portionSize: 10,
+	portionNumber: 1,
 	followingInProgress: []
 }
 
@@ -81,6 +84,11 @@ export const usersReducer = (state: UsersPageType = initialUsersState, action: U
 			return {
 				...state,
 				currentPage: action.currentPage
+			}
+		case 'SET-PORTION-NUMBER':
+			return {
+				...state,
+				portionNumber: action.portionNumber
 			}
 		case 'SET-TOTAL-USERS-COUNT':
 			return {

@@ -1,15 +1,15 @@
 
 
+//icons
+import defaultAvatar from '../../../../../../../assets/icons/default-avatar.svg';
+
 //styles
 import { FriendMessageAvatar, FriendMessageBlock, FriendMessageContainer, FriendMessageContent, FriendMessageText, FriendName } from "./FriendMessage.styled";
 
-type FriendMessagePropsType = {
-	userName: string
-	message: string
-	photo: string
-}
+//types
+import { ChatMessage } from "../../../../../../../common/types/messages";
 
-export const FriendMessage = (props: FriendMessagePropsType) => {
+export const FriendMessage = (props: ChatMessage) => {
 	const {
 		userName,
 		message,
@@ -19,7 +19,7 @@ export const FriendMessage = (props: FriendMessagePropsType) => {
 		<FriendMessageContainer>
 			<FriendMessageContent>
 				<FriendMessageAvatar
-					src={`${''}`}
+					src={`${photo || defaultAvatar}`}
 				/>
 				<FriendMessageBlock>
 					<FriendName>
